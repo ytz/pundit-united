@@ -1,5 +1,9 @@
 package com.ytz.punditunited;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -8,6 +12,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -25,10 +30,7 @@ public class FixtureFragment extends ListFragment{
 	private ListView listView;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// inflat and return the layout
-		//return inflater.inflate(R.layout.fixture_fragment, container, false);
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View rootView = inflater.inflate(R.layout.fixture_fragment,
                 container, false);
         listView = (ListView) rootView.findViewById(android.R.id.list);
@@ -41,23 +43,10 @@ public class FixtureFragment extends ListFragment{
         super.onActivityCreated(savedInstanceState);
                 
         getGameweek();
-        //getFixtureList();	
-        
-        //mAdapter = new FixtureListAdapter(getActivity(), list);
-        //listView.setAdapter(mAdapter);
     }
 	
 	private void getGameweek(){
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Control");
-		//query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-		/*try {
-			gameweek = query.find().get(0).getInt("GW");
-			System.out.println("GW IS " + gameweek);
-			getFixtureList();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		query.getInBackground("2oFu0OiS0b", new GetCallback<ParseObject>() {
 		  public void done(ParseObject object, ParseException e) {
 		    if (e == null) {
@@ -81,14 +70,57 @@ public class FixtureFragment extends ListFragment{
 			public void done(List<ParseObject> objects, ParseException e) {
            	 if (e == null) {
                  list = objects;
-                 mAdapter = new FixtureListAdapter(getActivity(), list);
-                 listView.setAdapter(mAdapter);
+                 
+                 ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
+                 System.out.println("Size of arrayList = " + arrayList.size());
+                 SeparatedListAdapter adapter = new SeparatedListAdapter(getActivity());  
+                 for (int i = 0; i < arrayList.size(); i++){
+                	 adapter.addSection(getDateHeader(arrayList.get(i)), new FixtureListAdapter(getActivity(), arrayList.get(i)));
+                 }
+                 //mAdapter = new FixtureListAdapter(getActivity(), list);
+                 //listView.setAdapter(mAdapter);
+                 listView.setAdapter(adapter);
              } else {
             	 System.out.println("Getting fixturelist, Error: " + e.getMessage());
-             }
-				
+             }				
 			}
         });
 	}
+	
+	private ArrayList<List<ParseObject>> separateListWithDate(List<ParseObject> list){
+		int cutoff = 0;
+		Date currDate = list.get(0).getDate("Date");
+		Calendar tempCal = Calendar.getInstance();
+		Calendar currCal = Calendar.getInstance();
+		tempCal.setTime(currDate);
+		ArrayList<List<ParseObject>> myList = new ArrayList<List<ParseObject>>();
+		for (int i = 0; i < list.size(); i++){
+			currDate = list.get(i).getDate("Date");
+			currCal.setTime(currDate);
+			System.out.println(i + ") " + tempCal.get(Calendar.DAY_OF_MONTH) + "   " + currCal.get(Calendar.DAY_OF_MONTH));
+			if( currCal.get(Calendar.DAY_OF_MONTH) != tempCal.get(Calendar.DAY_OF_MONTH) || 
+				currCal.get(Calendar.MONTH) != tempCal.get(Calendar.MONTH)){
+				System.out.println("cutoff = " + cutoff + " i = " + i);
+				myList.add(list.subList(cutoff, i));
+				cutoff = i;
+				tempCal.setTime(currCal.getTime());
+				--i;
+			}
+			
+			// Odd Last case problem
+			if(i == list.size()-1){		
+				myList.add(list.subList(list.size()-1, list.size()));
+			}
+		}
+		return myList;		
+	}
+	
+	private String getDateHeader(List<ParseObject> list){
+		Date currDate = list.get(0).getDate("Date");
+		SimpleDateFormat sf = new SimpleDateFormat("E, d MMM yy");
+		return sf.format(currDate);
+	}
 
+	
+	
 }

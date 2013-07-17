@@ -174,6 +174,10 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 	
+	/**
+	 * Stores fbId and Name to Parse's database when user uses the app
+	 * for the first time
+	 */
 	private static void getFacebookIdInBackground() {
 		  Request.executeMeRequestAsync(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
 		    @Override
