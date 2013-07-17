@@ -22,18 +22,71 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int icon_arsenal=0x7f020001;
+        public static final int icon_brom=0x7f020002;
+        public static final int icon_cardiff=0x7f020003;
+        public static final int icon_chelsea=0x7f020004;
+        public static final int icon_city=0x7f020005;
+        public static final int icon_crystal=0x7f020006;
+        public static final int icon_everton=0x7f020007;
+        public static final int icon_fulham=0x7f020008;
+        public static final int icon_ham=0x7f020009;
+        public static final int icon_hull=0x7f02000a;
+        public static final int icon_liverpool=0x7f02000b;
+        public static final int icon_newcastle=0x7f02000c;
+        public static final int icon_norwich=0x7f02000d;
+        public static final int icon_south=0x7f02000e;
+        public static final int icon_spurs=0x7f02000f;
+        public static final int icon_stoke=0x7f020010;
+        public static final int icon_sunderland=0x7f020011;
+        public static final int icon_swansea=0x7f020012;
+        public static final int icon_united=0x7f020013;
+        public static final int icon_villa=0x7f020014;
+        public static final int logo_arsenal=0x7f020015;
+        public static final int logo_brom=0x7f020016;
+        public static final int logo_cardiff=0x7f020017;
+        public static final int logo_chelsea=0x7f020018;
+        public static final int logo_city=0x7f020019;
+        public static final int logo_crystal=0x7f02001a;
+        public static final int logo_everton=0x7f02001b;
+        public static final int logo_fulham=0x7f02001c;
+        public static final int logo_ham=0x7f02001d;
+        public static final int logo_hull=0x7f02001e;
+        public static final int logo_liverpool=0x7f02001f;
+        public static final int logo_newcastle=0x7f020020;
+        public static final int logo_norwich=0x7f020021;
+        public static final int logo_south=0x7f020022;
+        public static final int logo_spurs=0x7f020023;
+        public static final int logo_stoke=0x7f020024;
+        public static final int logo_sunderland=0x7f020025;
+        public static final int logo_swansea=0x7f020026;
+        public static final int logo_united=0x7f020027;
+        public static final int logo_villa=0x7f020028;
     }
     public static final class id {
-        public static final int action_settings=0x7f080002;
+        public static final int action_settings=0x7f08000e;
+        public static final int imageView_away=0x7f080005;
+        public static final int imageView_home=0x7f080003;
+        public static final int linearlayout_time=0x7f080001;
         public static final int pager=0x7f080000;
-        public static final int textView1=0x7f080001;
+        public static final int textView1=0x7f08000d;
+        public static final int textView5=0x7f080007;
+        public static final int textView7=0x7f080009;
+        public static final int textView9=0x7f08000b;
+        public static final int textView_away=0x7f080006;
+        public static final int textView_awayOdds=0x7f08000c;
+        public static final int textView_drawOdds=0x7f08000a;
+        public static final int textView_home=0x7f080004;
+        public static final int textView_homeOdds=0x7f080008;
+        public static final int textView_time=0x7f080002;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int fixture_fragment=0x7f030001;
-        public static final int me_fragment=0x7f030002;
-        public static final int rank_fragment=0x7f030003;
-        public static final int social_fragment=0x7f030004;
+        public static final int fixture_list=0x7f030002;
+        public static final int me_fragment=0x7f030003;
+        public static final int rank_fragment=0x7f030004;
+        public static final int social_fragment=0x7f030005;
     }
     public static final class menu {
         public static final int main=0x7f070000;
