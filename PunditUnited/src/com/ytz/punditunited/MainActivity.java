@@ -5,19 +5,27 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity {
 
@@ -35,6 +43,23 @@ public class MainActivity extends FragmentActivity {
 		// PARSE SETUP
 		Parse.initialize(this, "gEPGfVTzUnO1j0Z2XdWuFfnrAkJ21DI5cW3X6vJp", "Bjpe0LDwNNUfmOwuiXrbylHeSSOSUAXgRrBudu24"); 
 		ParseAnalytics.trackAppOpened(getIntent()); // track statistics
+		
+		// PARSE FB
+		ParseFacebookUtils.initialize(getString(R.string.app_id));
+		
+		ParseFacebookUtils.logIn(this, new LogInCallback() {
+			  @Override
+			  public void done(ParseUser user, ParseException err) {
+			    if (user == null) {
+			      Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+			    } else if (user.isNew()) {
+			      Log.d("MyApp", "User signed up and logged in through Facebook!");
+			      getFacebookIdInBackground();
+			    } else {
+			      Log.d("MyApp", "User logged in through Facebook!");
+			    }
+			  }
+			});
 
 
 		// the page adapter contains all the fragment registrations
@@ -57,6 +82,17 @@ public class MainActivity extends FragmentActivity {
 		});
 
 		setupABar();
+	}
+
+	/**
+	 * PARSE
+	 * =====
+	 * For Facebook's "Single sign-on"
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
 	}
 
 	public static class MyAdapter extends FragmentPagerAdapter {
@@ -137,5 +173,18 @@ public class MainActivity extends FragmentActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	private static void getFacebookIdInBackground() {
+		  Request.executeMeRequestAsync(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
+		    @Override
+		    public void onCompleted(GraphUser user, Response response) {
+		      if (user != null) {
+		        ParseUser.getCurrentUser().put("fbId", user.getId());
+		        ParseUser.getCurrentUser().put("Name", user.getName());
+		        ParseUser.getCurrentUser().saveInBackground();
+		      }
+		    }
+		  });
+		}
 
 }
