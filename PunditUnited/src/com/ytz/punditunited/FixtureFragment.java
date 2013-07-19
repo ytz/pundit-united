@@ -13,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -22,105 +23,144 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class FixtureFragment extends ListFragment{
-	
+public class FixtureFragment extends ListFragment {
+
 	private List<ParseObject> list;
 	private int gameweek;
 	private FixtureListAdapter mAdapter;
 	private ListView listView;
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
-		View rootView = inflater.inflate(R.layout.fixture_fragment,
-                container, false);
-        listView = (ListView) rootView.findViewById(android.R.id.list);
+	public static final String MATCHID = "com.ytz.punditunited.MATCHID";
+	public static final String HOME = "com.ytz.punditunited.HOME";
+	public static final String AWAY = "com.ytz.punditunited.AWAY";
+	public static final String H_ODDS = "com.ytz.punditunited.H_ODDS";
+	public static final String D_ODDS = "com.ytz.punditunited.D_ODDS";
+	public static final String A_ODDS = "com.ytz.punditunited.A_ODDS";
+	private SeparatedListAdapter adapter;
 
-        return rootView;
-	}
-	
 	@Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-                
-        getGameweek();
-    }
-	
-	private void getGameweek(){
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Intent intent = new Intent(getActivity(), MatchActivity.class);
+
+		intent.putExtra(MATCHID, ((ParseObject) adapter.getItem(position)).getString("objectId"));
+		intent.putExtra(HOME, ((ParseObject) adapter.getItem(position)).getString("Home"));
+		intent.putExtra(AWAY, ((ParseObject) adapter.getItem(position)).getString("Away"));
+		intent.putExtra(H_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("H_odds"));
+		intent.putExtra(D_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("D_odds"));
+		intent.putExtra(A_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("A_odds"));
+
+		/*
+		 * intent.putExtra(MATCHID, list.get(position).getString("objectId"));
+		 * intent.putExtra(HOME, list.get(position).getString("Home"));
+		 * intent.putExtra(AWAY, list.get(position).getString("Away"));
+		 * intent.putExtra(H_ODDS, list.get(position).getNumber("H_odds"));
+		 * intent.putExtra(D_ODDS, list.get(position).getNumber("D_odds"));
+		 * intent.putExtra(A_ODDS, list.get(position).getNumber("A_odds"));
+		 */
+
+		startActivity(intent);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fixture_fragment, container,
+				false);
+		listView = (ListView) rootView.findViewById(android.R.id.list);
+
+		return rootView;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		getGameweek();
+	}
+
+	private void getGameweek() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Control");
 		query.getInBackground("2oFu0OiS0b", new GetCallback<ParseObject>() {
-		  public void done(ParseObject object, ParseException e) {
-		    if (e == null) {
-		      gameweek = object.getInt("GW");
-		      getFixtureList();
-		    } else {
-		      // something went wrong
-		    	System.out.println("Getting gameweek, Error: " + e.getMessage());
-		    }
-		  }
+			public void done(ParseObject object, ParseException e) {
+				if (e == null) {
+					gameweek = object.getInt("GW");
+					getFixtureList();
+				} else {
+					// something went wrong
+					System.out.println("Getting gameweek, Error: "
+							+ e.getMessage());
+				}
+			}
 		});
 	}
-	
-	private void getFixtureList(){
+
+	private void getFixtureList() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Fixture");
 		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
-        query.whereEqualTo("GW", gameweek);
-        query.orderByAscending("Date");
-        query.findInBackground(new FindCallback<ParseObject>() {
-           	@Override
+		query.whereEqualTo("GW", gameweek);
+		query.orderByAscending("Date");
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
-           	 if (e == null) {
-                 list = objects;
-                 
-                 ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
-                 System.out.println("Size of arrayList = " + arrayList.size());
-                 SeparatedListAdapter adapter = new SeparatedListAdapter(getActivity());  
-                 for (int i = 0; i < arrayList.size(); i++){
-                	 adapter.addSection(getDateHeader(arrayList.get(i)), new FixtureListAdapter(getActivity(), arrayList.get(i)));
-                 }
-                 //mAdapter = new FixtureListAdapter(getActivity(), list);
-                 //listView.setAdapter(mAdapter);
-                 listView.setAdapter(adapter);
-             } else {
-            	 System.out.println("Getting fixturelist, Error: " + e.getMessage());
-             }				
+				if (e == null) {
+					list = objects;
+
+					ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
+					System.out.println("Size of arrayList = "
+							+ arrayList.size());
+					adapter = new SeparatedListAdapter(getActivity());
+					for (int i = 0; i < arrayList.size(); i++) {
+						adapter.addSection(
+								getDateHeader(arrayList.get(i)),
+								new FixtureListAdapter(getActivity(), arrayList
+										.get(i)));
+					}
+					// mAdapter = new FixtureListAdapter(getActivity(), list);
+					// listView.setAdapter(mAdapter);
+					listView.setAdapter(adapter);
+				} else {
+					System.out.println("Getting fixturelist, Error: "
+							+ e.getMessage());
+				}
 			}
-        });
+		});
 	}
-	
-	private ArrayList<List<ParseObject>> separateListWithDate(List<ParseObject> list){
+
+	private ArrayList<List<ParseObject>> separateListWithDate(
+			List<ParseObject> list) {
 		int cutoff = 0;
 		Date currDate = list.get(0).getDate("Date");
 		Calendar tempCal = Calendar.getInstance();
 		Calendar currCal = Calendar.getInstance();
 		tempCal.setTime(currDate);
 		ArrayList<List<ParseObject>> myList = new ArrayList<List<ParseObject>>();
-		for (int i = 0; i < list.size(); i++){
+		for (int i = 0; i < list.size(); i++) {
 			currDate = list.get(i).getDate("Date");
 			currCal.setTime(currDate);
-			System.out.println(i + ") " + tempCal.get(Calendar.DAY_OF_MONTH) + "   " + currCal.get(Calendar.DAY_OF_MONTH));
-			if( currCal.get(Calendar.DAY_OF_MONTH) != tempCal.get(Calendar.DAY_OF_MONTH) || 
-				currCal.get(Calendar.MONTH) != tempCal.get(Calendar.MONTH)){
+			System.out.println(i + ") " + tempCal.get(Calendar.DAY_OF_MONTH)
+					+ "   " + currCal.get(Calendar.DAY_OF_MONTH));
+			if (currCal.get(Calendar.DAY_OF_MONTH) != tempCal
+					.get(Calendar.DAY_OF_MONTH)
+					|| currCal.get(Calendar.MONTH) != tempCal
+							.get(Calendar.MONTH)) {
 				System.out.println("cutoff = " + cutoff + " i = " + i);
 				myList.add(list.subList(cutoff, i));
 				cutoff = i;
 				tempCal.setTime(currCal.getTime());
 				--i;
 			}
-			
+
 			// Odd Last case problem
-			if(i == list.size()-1){		
-				myList.add(list.subList(list.size()-1, list.size()));
+			if (i == list.size() - 1) {
+				myList.add(list.subList(list.size() - 1, list.size()));
 			}
 		}
-		return myList;		
+		return myList;
 	}
-	
-	private String getDateHeader(List<ParseObject> list){
+
+	private String getDateHeader(List<ParseObject> list) {
 		Date currDate = list.get(0).getDate("Date");
 		SimpleDateFormat sf = new SimpleDateFormat("E, d MMM yy");
 		return sf.format(currDate);
 	}
 
-	
-	
 }
