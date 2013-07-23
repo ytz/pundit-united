@@ -13,9 +13,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView_HfullName"
@@ -24,7 +24,7 @@
                 android:text="Liverpool" />
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/imageView_pHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/btn_dialog" />
@@ -34,15 +34,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1.20" />
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView5"
@@ -61,15 +60,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2.50" />
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_weight="1"
-            android:gravity="center" >
+            android:gravity="center"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView_AfullName"
@@ -77,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:text="Stoke" />
 
-            <ImageButton
-                android:id="@+id/imageButton1"
+            <ImageView
+                android:id="@+id/imageView_pAway"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/btn_dialog" />
@@ -88,9 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3.60" />
-
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -106,28 +102,92 @@
         android:layout_weight="0.229"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <LinearLayout
+            android:id="@+id/linearlayout_Hbutton"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:background="@android:drawable/btn_default"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:text="LIV\n\n69%" />
+            android:orientation="vertical"
+            android:paddingBottom="7px" >
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="H" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_Dbutton"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="DRAW\n\n5%" />
+            android:background="@android:drawable/btn_default"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="7px" >
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="D" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_Abutton"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="STO\n\n11%" />
+            android:background="@android:drawable/btn_default"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="7px" >
 
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="A" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="TextView" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

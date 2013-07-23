@@ -41,10 +41,11 @@ public class FixtureFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), MatchActivity.class);
 
-		intent.putExtra(MATCHID, ((ParseObject) adapter.getItem(position)).getString("objectId"));
+		intent.putExtra(MATCHID, ((ParseObject) adapter.getItem(position)).getObjectId());
 		intent.putExtra(HOME, ((ParseObject) adapter.getItem(position)).getString("Home"));
 		intent.putExtra(AWAY, ((ParseObject) adapter.getItem(position)).getString("Away"));
 		intent.putExtra(H_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("H_odds"));
+		System.out.println(((ParseObject) adapter.getItem(position)).getNumber("H_odds"));
 		intent.putExtra(D_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("D_odds"));
 		intent.putExtra(A_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("A_odds"));
 
@@ -105,8 +106,6 @@ public class FixtureFragment extends ListFragment {
 					list = objects;
 
 					ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
-					System.out.println("Size of arrayList = "
-							+ arrayList.size());
 					adapter = new SeparatedListAdapter(getActivity());
 					for (int i = 0; i < arrayList.size(); i++) {
 						adapter.addSection(
@@ -136,13 +135,10 @@ public class FixtureFragment extends ListFragment {
 		for (int i = 0; i < list.size(); i++) {
 			currDate = list.get(i).getDate("Date");
 			currCal.setTime(currDate);
-			System.out.println(i + ") " + tempCal.get(Calendar.DAY_OF_MONTH)
-					+ "   " + currCal.get(Calendar.DAY_OF_MONTH));
 			if (currCal.get(Calendar.DAY_OF_MONTH) != tempCal
 					.get(Calendar.DAY_OF_MONTH)
 					|| currCal.get(Calendar.MONTH) != tempCal
 							.get(Calendar.MONTH)) {
-				System.out.println("cutoff = " + cutoff + " i = " + i);
 				myList.add(list.subList(cutoff, i));
 				cutoff = i;
 				tempCal.setTime(currCal.getTime());

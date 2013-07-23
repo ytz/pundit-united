@@ -85,11 +85,9 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		String home = ParseObjectList.get(position).getString("Home");
 		String away = ParseObjectList.get(position).getString("Away");
 		Date date = ParseObjectList.get(position).getDate("Date");
-		// Calendar matchday =
-		// Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
 		Calendar matchday = Calendar.getInstance(TimeZone.getDefault());
 		matchday.setTime(date);
-		// matchday.setTimeZone((TimeZone.getDefault()));
 
 		holder.tv_homeTeam.setText(ClubHelper.getShortName(home));
 		holder.tv_awayTeam.setText(ClubHelper.getShortName(away));

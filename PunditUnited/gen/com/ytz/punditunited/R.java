@@ -254,10 +254,7 @@ containing a value of this type.
         public static final int logo_villa=0x7f020047;
     }
     public static final class id {
-        public static final int action_settings=0x7f040032;
-        public static final int button1=0x7f04002f;
-        public static final int button2=0x7f040030;
-        public static final int button3=0x7f040031;
+        public static final int action_settings=0x7f040039;
         public static final int com_facebook_login_activity_progress_bar=0x7f040006;
         public static final int com_facebook_picker_activity_circle=0x7f040005;
         public static final int com_facebook_picker_checkbox=0x7f040008;
@@ -277,11 +274,15 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f040018;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f040016;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f040017;
-        public static final int imageButton1=0x7f04002d;
-        public static final int imageView1=0x7f040028;
         public static final int imageView_away=0x7f04001d;
         public static final int imageView_home=0x7f04001b;
+        public static final int imageView_pAway=0x7f04002d;
+        public static final int imageView_pHome=0x7f040028;
+        public static final int imageView_profilePic=0x7f040037;
         public static final int large=0x7f040002;
+        public static final int linearlayout_Abutton=0x7f040033;
+        public static final int linearlayout_Dbutton=0x7f040031;
+        public static final int linearlayout_Hbutton=0x7f04002f;
         public static final int linearlayout_time=0x7f040019;
         public static final int list_header_title=0x7f040025;
         public static final int normal=0x7f040001;
@@ -290,9 +291,13 @@ containing a value of this type.
         public static final int search_box=0x7f040014;
         public static final int small=0x7f040000;
         public static final int textView1=0x7f040026;
+        public static final int textView2=0x7f040032;
+        public static final int textView3=0x7f040034;
+        public static final int textView4=0x7f040030;
         public static final int textView5=0x7f04001f;
         public static final int textView6=0x7f04002a;
         public static final int textView7=0x7f040021;
+        public static final int textView8=0x7f040035;
         public static final int textView9=0x7f040023;
         public static final int textView_AfullName=0x7f04002c;
         public static final int textView_HfullName=0x7f040027;
@@ -301,9 +306,11 @@ containing a value of this type.
         public static final int textView_drawOdds=0x7f040022;
         public static final int textView_home=0x7f04001c;
         public static final int textView_homeOdds=0x7f040020;
+        public static final int textView_name=0x7f040038;
         public static final int textView_pAwayOdds=0x7f04002e;
         public static final int textView_pDrawOdds=0x7f04002b;
         public static final int textView_pHomeOdds=0x7f040029;
+        public static final int textView_rankNumber=0x7f040036;
         public static final int textView_time=0x7f04001a;
     }
     public static final class layout {
@@ -327,7 +334,8 @@ containing a value of this type.
         public static final int me_fragment=0x7f030011;
         public static final int predict_fragment=0x7f030012;
         public static final int rank_fragment=0x7f030013;
-        public static final int social_fragment=0x7f030014;
+        public static final int rank_list=0x7f030014;
+        public static final int social_fragment=0x7f030015;
     }
     public static final class menu {
         public static final int main=0x7f090000;
