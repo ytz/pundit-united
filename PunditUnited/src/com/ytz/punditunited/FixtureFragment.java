@@ -44,19 +44,9 @@ public class FixtureFragment extends ListFragment {
 		intent.putExtra(MATCHID, ((ParseObject) adapter.getItem(position)).getObjectId());
 		intent.putExtra(HOME, ((ParseObject) adapter.getItem(position)).getString("Home"));
 		intent.putExtra(AWAY, ((ParseObject) adapter.getItem(position)).getString("Away"));
-		intent.putExtra(H_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("H_odds"));
-		System.out.println(((ParseObject) adapter.getItem(position)).getNumber("H_odds"));
-		intent.putExtra(D_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("D_odds"));
-		intent.putExtra(A_ODDS, ((ParseObject) adapter.getItem(position)).getNumber("A_odds"));
-
-		/*
-		 * intent.putExtra(MATCHID, list.get(position).getString("objectId"));
-		 * intent.putExtra(HOME, list.get(position).getString("Home"));
-		 * intent.putExtra(AWAY, list.get(position).getString("Away"));
-		 * intent.putExtra(H_ODDS, list.get(position).getNumber("H_odds"));
-		 * intent.putExtra(D_ODDS, list.get(position).getNumber("D_odds"));
-		 * intent.putExtra(A_ODDS, list.get(position).getNumber("A_odds"));
-		 */
+		intent.putExtra(H_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("H_odds"));
+		intent.putExtra(D_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("D_odds"));
+		intent.putExtra(A_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("A_odds"));
 
 		startActivity(intent);
 	}

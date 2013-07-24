@@ -1,5 +1,7 @@
 package com.ytz.punditunited;
 
+import java.text.DecimalFormat;
+
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 public class PredictFragment extends Fragment {
 	
 	String matchID;
+	DecimalFormat df = new DecimalFormat("#.00");
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,12 +53,12 @@ public class PredictFragment extends Fragment {
 		tv_home.setText(home);
 		tv_away.setText(away);
 
-		tv_hOdds.setText(String.valueOf((Double)getActivity().getIntent().getExtras()
-						.getDouble(FixtureFragment.H_ODDS)));
-		tv_dOdds.setText(String.valueOf((Double)getActivity().getIntent().getExtras()
-						.getDouble(FixtureFragment.D_ODDS)));
-		tv_aOdds.setText(String.valueOf((Double)getActivity().getIntent().getExtras()
-						.getDouble(FixtureFragment.A_ODDS)));
+		tv_hOdds.setText(String.valueOf(df.format(getActivity().getIntent().getExtras()
+						.getDouble(FixtureFragment.H_ODDS))));
+		tv_dOdds.setText(String.valueOf(df.format(getActivity().getIntent().getExtras()
+						.getDouble(FixtureFragment.D_ODDS))));
+		tv_aOdds.setText(String.valueOf((df.format(getActivity().getIntent().getExtras()
+						.getDouble(FixtureFragment.A_ODDS)))));
 
 		// IMAGE
 		ImageView iv_home = (ImageView) view.findViewById(R.id.imageView_pHome);

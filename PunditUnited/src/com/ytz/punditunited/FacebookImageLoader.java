@@ -15,6 +15,8 @@ package com.ytz.punditunited;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * Based on http://code.google.com/p/android-imagedownloader/
+ * http://blog.catch.com/post/45924562776/caching-facebook-profile-images-utility-for-android
+ * https://github.com/htormey/AndroidFacebookImageCache
  * Updated by Harry Tormey   <harry@catch.com>
  */
 
