@@ -35,8 +35,12 @@ public class FixtureFragment extends ListFragment {
 	public static final String H_ODDS = "com.ytz.punditunited.H_ODDS";
 	public static final String D_ODDS = "com.ytz.punditunited.D_ODDS";
 	public static final String A_ODDS = "com.ytz.punditunited.A_ODDS";
+	public static final String GW = "com.ytz.punditunited.GW";
 	private SeparatedListAdapter adapter;
 
+	/**
+	 * When list is clicked, send match information and open MatchActivity.java
+	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Intent intent = new Intent(getActivity(), MatchActivity.class);
@@ -47,6 +51,7 @@ public class FixtureFragment extends ListFragment {
 		intent.putExtra(H_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("H_odds"));
 		intent.putExtra(D_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("D_odds"));
 		intent.putExtra(A_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("A_odds"));
+		intent.putExtra(GW,((ParseObject) adapter.getItem(position)).getInt("GW"));
 
 		startActivity(intent);
 	}

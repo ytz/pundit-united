@@ -17,8 +17,9 @@ import android.widget.TextView;
 
 public class PredictFragment extends Fragment {
 	
-	String matchID;
+	private String matchID;
 	DecimalFormat df = new DecimalFormat("#.00");
+	private int gameweek;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,13 +71,15 @@ public class PredictFragment extends Fragment {
 
 		// BUTTONS
 		// BET HOME
+		gameweek = getActivity().getIntent().getExtras()
+				.getInt(FixtureFragment.GW);
 		LinearLayout buttonH = (LinearLayout) view
 				.findViewById(R.id.linearlayout_Hbutton);
 		buttonH.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// stuff
-				placeBet(0, matchID);
+				placeBet(0, matchID, gameweek);
 			}
 		});
 
@@ -86,7 +89,7 @@ public class PredictFragment extends Fragment {
 		buttonD.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				placeBet(1, matchID);
+				placeBet(1, matchID, gameweek);
 			}
 		});
 
@@ -96,22 +99,25 @@ public class PredictFragment extends Fragment {
 		buttonA.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				placeBet(2, matchID);
+				placeBet(2, matchID, gameweek);
 			}
 		});
 
 		return view;
 	}
 	
-	private void placeBet(int type, String id){
+	private void placeBet(int type, String id, int gameweek){
 		System.out.println("IN PLACEBET!");
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		ParseObject myLog = new ParseObject("History");
-		myLog.put("UserID", currentUser );
+		//myLog.put("UserID", currentUser );
+		myLog.put("User", currentUser );
 		//myLog.put("parent", ParseObject.createWithoutData("Control", "2oFu0OiS0b"));
-		myLog.put("MatchID", id);
+		//myLog.put("MatchID", id);
+		myLog.put("Match", ParseObject.createWithoutData("Fixture", id));
 		myLog.put("Bet", type);
 		myLog.put("Check", false);
+		myLog.put("GW", gameweek);
 		myLog.saveInBackground();
 	}
 }

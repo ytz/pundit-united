@@ -13,18 +13,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
-import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity {
@@ -69,7 +67,7 @@ public class MainActivity extends FragmentActivity {
 		mPager.setAdapter(mAdapter);
 		
 		// Cache page?
-		mPager.setOffscreenPageLimit(4);
+		mPager.setOffscreenPageLimit(NUM_ITEMS);
 
 		// Cause indicator to change when swiped to next tab
 		mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -172,6 +170,20 @@ public class MainActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+	   switch (item.getItemId()) 
+	   {
+	     case R.id.menu_profile:
+	        Intent intent = new Intent(this, ProfileActivity.class);
+	        startActivity(intent);
+	        return true;
+	     default:
+	        return super.onOptionsItemSelected(item);
+	   }
 	}
 	
 	/**
