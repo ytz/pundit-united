@@ -202,6 +202,7 @@ public class MainActivity extends FragmentActivity {
 		      if (user != null) {
 		        ParseUser.getCurrentUser().put("fbId", user.getId());
 		        ParseUser.getCurrentUser().put("Name", user.getName());
+		        ParseUser.getCurrentUser().put("Points", 100); // initial points
 		        ParseUser.getCurrentUser().saveInBackground();
 		      }
 		    }

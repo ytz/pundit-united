@@ -96,7 +96,8 @@ public class PredictFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// stuff
-				placeBet(0, matchID, gameweek);
+				//placeBet(0, matchID, gameweek);
+				openDialog(0);
 			}
 		});
 
@@ -106,7 +107,8 @@ public class PredictFragment extends Fragment {
 		buttonD.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				placeBet(1, matchID, gameweek);
+				//placeBet(1, matchID, gameweek);
+				openDialog(1);
 			}
 		});
 
@@ -116,7 +118,8 @@ public class PredictFragment extends Fragment {
 		buttonA.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				placeBet(2, matchID, gameweek);
+				//placeBet(2, matchID, gameweek);
+				openDialog(2);
 			}
 		});
 
@@ -134,6 +137,9 @@ public class PredictFragment extends Fragment {
 		intent.putExtra(FixtureFragment.H_ODDS, homeOdds);
 		intent.putExtra(FixtureFragment.D_ODDS, drawOdds);
 		intent.putExtra(FixtureFragment.A_ODDS, awayOdds);
+		
+		intent.putExtra(FixtureFragment.GW, gameweek);
+		intent.putExtra(FixtureFragment.MATCHID, matchID);
 
 		predictDialog.setArguments(intent.getExtras());
 		predictDialog.show(getActivity().getSupportFragmentManager(), "predictDialog");

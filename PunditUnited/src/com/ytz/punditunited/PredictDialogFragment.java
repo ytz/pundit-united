@@ -3,6 +3,9 @@ package com.ytz.punditunited;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
@@ -27,6 +31,10 @@ public class PredictDialogFragment extends DialogFragment {
 	private String away;
 	private String home;
 	private TextView seekText;
+	private String matchID;
+	private int gameweek;
+	private EditText comment;
+	private int totalPoints;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {		
@@ -47,6 +55,9 @@ public class PredictDialogFragment extends DialogFragment {
 		homeOdds = this.getArguments().getString(FixtureFragment.H_ODDS);
 		drawOdds = this.getArguments().getString(FixtureFragment.D_ODDS);
 		awayOdds = this.getArguments().getString(FixtureFragment.A_ODDS);
+		
+		matchID = this.getArguments().getString(FixtureFragment.MATCHID);
+		gameweek = this.getArguments().getInt(FixtureFragment.GW);
 
 		// Inflater
 		View layout = inflater.inflate(R.layout.dialog_predict, null);
@@ -54,8 +65,13 @@ public class PredictDialogFragment extends DialogFragment {
 		spinner = (Spinner) layout.findViewById(R.id.spinner_dialog);
 		addItemOnSpinner();
 		//spinner.setOnItemSelectedListener(getActivity());
+		//spinner.getSelectedItemPosition()
 		
+    	totalPoints = ParseUser.getCurrentUser().getInt("Points");
 		seekText = (TextView) layout.findViewById(R.id.textView_seekText);
+		seekText.setText("" + ((int)((0/100.0)*(totalPoints-5))/5*5 +5));
+		
+		comment = (EditText) layout.findViewById(R.id.editText_dialogComment);
 		
 		SeekBar seekbar = (SeekBar) layout.findViewById(R.id.seekBar_dialog);
 		seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {       
@@ -68,7 +84,9 @@ public class PredictDialogFragment extends DialogFragment {
 	        @Override       
 	        public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
 	            //positionSeekBar(progress);
-	        	seekText.setText("" + progress);
+	        	//seekText.setText("" + progress);
+	        	int display =  ((int)((progress/100.0)*(totalPoints-5))/5*5 +5);
+	        	seekText.setText("" + display);
 	        }
 	    });
 		
@@ -79,6 +97,7 @@ public class PredictDialogFragment extends DialogFragment {
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						// User clicked OK button
+						placeBet(spinner.getSelectedItemPosition(),matchID, gameweek);
 					}
 				});
 		builder.setNegativeButton(R.string.cancel,
@@ -89,6 +108,24 @@ public class PredictDialogFragment extends DialogFragment {
 				});
 
 		return builder.create();
+	}
+	
+	private void placeBet(int type, String id, int gameweek){
+		System.out.println("IN PLACEBET!");
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		ParseObject myLog = new ParseObject("History");
+		//myLog.put("UserID", currentUser );
+		myLog.put("User", currentUser );
+		//myLog.put("parent", ParseObject.createWithoutData("Control", "2oFu0OiS0b"));
+		//myLog.put("MatchID", id);
+		myLog.put("Match", ParseObject.createWithoutData("Fixture", id));
+		myLog.put("BetType", type);
+		myLog.put("Check", false);
+		myLog.put("GW", gameweek);
+		myLog.put("BetAmount", Integer.parseInt(seekText.getText().toString()));
+		myLog.put("Comment", comment.getText().toString());
+		myLog.saveInBackground();
+		//openDialog(type);
 	}
 
 	/*protected void positionSeekBar(int progress) {
