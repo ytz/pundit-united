@@ -6,7 +6,9 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +20,15 @@ import android.widget.TextView;
 public class PredictFragment extends Fragment {
 	
 	private String matchID;
-	DecimalFormat df = new DecimalFormat("#.00");
+	private DecimalFormat df = new DecimalFormat("#.00");
 	private int gameweek;
+	public static String SELECTION = "com.ytz.punditunited.SELECTION";
+	
+	private String home;
+	private String away;
+	private String homeOdds;
+	private String drawOdds;
+	private String awayOdds;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,9 +39,9 @@ public class PredictFragment extends Fragment {
 		View view = inflater.inflate(R.layout.predict_fragment, container,
 				false);
 
-		String home = getActivity().getIntent().getExtras()
+		home = getActivity().getIntent().getExtras()
 				.getString(FixtureFragment.HOME);
-		String away = getActivity().getIntent().getExtras()
+		away = getActivity().getIntent().getExtras()
 				.getString(FixtureFragment.AWAY);
 		matchID = getActivity().getIntent().getExtras()
 				.getString(FixtureFragment.MATCHID);
@@ -53,6 +62,14 @@ public class PredictFragment extends Fragment {
 		// SET TEXT
 		tv_home.setText(home);
 		tv_away.setText(away);
+		
+		homeOdds = String.valueOf(df.format(getActivity().getIntent().getExtras()
+				.getDouble(FixtureFragment.H_ODDS)));
+		drawOdds = String.valueOf(df.format(getActivity().getIntent().getExtras()
+				.getDouble(FixtureFragment.D_ODDS)));
+		awayOdds = String.valueOf((df.format(getActivity().getIntent().getExtras()
+				.getDouble(FixtureFragment.A_ODDS))));
+				
 
 		tv_hOdds.setText(String.valueOf(df.format(getActivity().getIntent().getExtras()
 						.getDouble(FixtureFragment.H_ODDS))));
@@ -106,6 +123,22 @@ public class PredictFragment extends Fragment {
 		return view;
 	}
 	
+	protected void openDialog(int type) {
+		// TODO Auto-generated method stub
+		DialogFragment predictDialog = new PredictDialogFragment();
+		Intent intent = new Intent();
+		intent.putExtra(SELECTION, type);
+		intent.putExtra(FixtureFragment.HOME, home);
+		intent.putExtra(FixtureFragment.AWAY, away);
+		
+		intent.putExtra(FixtureFragment.H_ODDS, homeOdds);
+		intent.putExtra(FixtureFragment.D_ODDS, drawOdds);
+		intent.putExtra(FixtureFragment.A_ODDS, awayOdds);
+
+		predictDialog.setArguments(intent.getExtras());
+		predictDialog.show(getActivity().getSupportFragmentManager(), "predictDialog");
+	}
+
 	private void placeBet(int type, String id, int gameweek){
 		System.out.println("IN PLACEBET!");
 		ParseUser currentUser = ParseUser.getCurrentUser();
@@ -119,5 +152,6 @@ public class PredictFragment extends Fragment {
 		myLog.put("Check", false);
 		myLog.put("GW", gameweek);
 		myLog.saveInBackground();
+		openDialog(type);
 	}
 }

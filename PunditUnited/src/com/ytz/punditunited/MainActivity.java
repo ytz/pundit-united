@@ -30,6 +30,7 @@ public class MainActivity extends FragmentActivity {
 	static final int NUM_ITEMS = 4;
 	MyAdapter mAdapter;
 	ViewPager mPager;
+	public static String MYUSERID = "com.ytz.punditunited.MainActivity.MYUSERID";
 
 	// http://stackoverflow.com/questions/16091704/android-scrollable-tabs-swipe-state-when-swiping
 	@SuppressLint("NewApi")
@@ -172,6 +173,9 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 	
+	/**
+	 * Action Bar - Profile
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
@@ -179,6 +183,7 @@ public class MainActivity extends FragmentActivity {
 	   {
 	     case R.id.menu_profile:
 	        Intent intent = new Intent(this, ProfileActivity.class);
+	        intent.putExtra(MYUSERID, ParseUser.getCurrentUser().getObjectId());
 	        startActivity(intent);
 	        return true;
 	     default:

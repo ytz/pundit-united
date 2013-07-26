@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
 public class MatchActivity extends FragmentActivity {
 
@@ -22,6 +24,9 @@ public class MatchActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Up Action
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// the page adapter contains all the fragment registrations
 		mAdapter = new MyAdapter(getSupportFragmentManager());
@@ -101,6 +106,17 @@ public class MatchActivity extends FragmentActivity {
 			}
 			return fragment;
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
 	}
 
 }

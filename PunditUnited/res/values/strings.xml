@@ -6,5 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="app_id">326520617425482</string>
     <string name="menu_profile">My Profile</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

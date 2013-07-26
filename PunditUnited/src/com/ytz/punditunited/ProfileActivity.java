@@ -2,14 +2,16 @@ package com.ytz.punditunited;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
 public class ProfileActivity extends FragmentActivity {
 
@@ -23,6 +25,9 @@ public class ProfileActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Up Action
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// the page adapter contains all the fragment registrations
 		mAdapter = new MyAdapter(getSupportFragmentManager());
@@ -110,5 +115,16 @@ public class ProfileActivity extends FragmentActivity {
 			}
 			return fragment;
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
 	}
 }

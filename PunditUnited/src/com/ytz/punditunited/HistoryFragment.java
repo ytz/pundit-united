@@ -20,6 +20,7 @@ public class HistoryFragment extends ListFragment {
 
 	private ListView listView;
 	private HistoryListAdapter mAdapter;
+	private String userID;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,6 +28,9 @@ public class HistoryFragment extends ListFragment {
 		View rootView = inflater.inflate(R.layout.history_fragment, container,
 				false);
 		listView = (ListView) rootView.findViewById(android.R.id.list);
+		
+		userID = getActivity().getIntent().getExtras()
+		.getString(MainActivity.MYUSERID);
 
 		return rootView;
 	}
@@ -39,7 +43,14 @@ public class HistoryFragment extends ListFragment {
 	}
 
 	private void getHistory() {
-		ParseUser currentUser = ParseUser.getCurrentUser();
+		ParseUser currentUser = null;
+		try {
+			currentUser = ParseUser.getQuery().get(userID);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//ParseUser currentUser = ParseUser.getCurrentUser();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 		query.whereEqualTo("User", currentUser);
 		query.include("Match");

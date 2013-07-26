@@ -9,14 +9,16 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class RankFragment extends Fragment {
+public class RankFragment extends ListFragment {
 
 	private ListView listView;
 	protected List<ParseUser> list;
@@ -48,7 +50,7 @@ public class RankFragment extends Fragment {
 			public void done(List<ParseUser> objects, ParseException e) {
 				if (e == null) {
 					list = objects;
-					
+
 					System.out.println("Number of users = " + objects.size());
 
 					mAdapter = new RankListAdapter(getActivity(), list);
@@ -61,5 +63,14 @@ public class RankFragment extends Fragment {
 			}
 		});
 
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Intent intent = new Intent(getActivity(), ProfileActivity.class);
+
+		intent.putExtra(MainActivity.MYUSERID, list.get(position).getObjectId());
+
+		startActivity(intent);
 	}
 }
