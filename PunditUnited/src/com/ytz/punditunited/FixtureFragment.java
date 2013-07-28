@@ -36,6 +36,7 @@ public class FixtureFragment extends ListFragment {
 	public static final String D_ODDS = "com.ytz.punditunited.D_ODDS";
 	public static final String A_ODDS = "com.ytz.punditunited.A_ODDS";
 	public static final String GW = "com.ytz.punditunited.GW";
+	public static final String DATE = "com.ytz.punditunited.DATE";
 	private SeparatedListAdapter adapter;
 
 	/**
@@ -52,6 +53,7 @@ public class FixtureFragment extends ListFragment {
 		intent.putExtra(D_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("D_odds"));
 		intent.putExtra(A_ODDS, ((ParseObject) adapter.getItem(position)).getDouble("A_odds"));
 		intent.putExtra(GW,((ParseObject) adapter.getItem(position)).getInt("GW"));
+		intent.putExtra(DATE, ((ParseObject) adapter.getItem(position)).getDate("Date").getTime());
 
 		startActivity(intent);
 	}

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -35,9 +34,13 @@ public class PredictDialogFragment extends DialogFragment {
 	private int gameweek;
 	private EditText comment;
 	private int totalPoints;
+	private PredictFragment mListener;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {		
+		
+		mListener = (PredictFragment) getTargetFragment();
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		// Get the layout inflater
 		LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -98,6 +101,8 @@ public class PredictDialogFragment extends DialogFragment {
 					public void onClick(DialogInterface dialog, int id) {
 						// User clicked OK button
 						placeBet(spinner.getSelectedItemPosition(),matchID, gameweek);
+						mListener.update();
+						
 					}
 				});
 		builder.setNegativeButton(R.string.cancel,
@@ -143,6 +148,9 @@ public class PredictDialogFragment extends DialogFragment {
 		
 	}*/
 
+	/**
+	 * Populate Spinner with the 3 items
+	 */
 	public void addItemOnSpinner() {
 		List<String> list = new ArrayList<String>();
 		list.add(home + " (" + homeOdds + ")");
@@ -154,6 +162,13 @@ public class PredictDialogFragment extends DialogFragment {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(dataAdapter);
 		spinner.setSelection(selection);
+	}
+	
+	/**
+	 * Interface
+	 */
+	public interface PredictDialogFragmentListener{
+		public void update();
 	}
 	
 	/*@Override
