@@ -121,6 +121,11 @@ public class FixtureFragment extends ListFragment {
 		});
 	}
 
+	/**
+	 * Fixtures in a list = same date
+	 * @param list
+	 * @return
+	 */
 	private ArrayList<List<ParseObject>> separateListWithDate(
 			List<ParseObject> list) {
 		int cutoff = 0;
@@ -150,6 +155,11 @@ public class FixtureFragment extends ListFragment {
 		return myList;
 	}
 
+	/**
+	 * Format date with SimpleDateFormat
+	 * @param list
+	 * @return
+	 */
 	private String getDateHeader(List<ParseObject> list) {
 		Date currDate = list.get(0).getDate("Date");
 		SimpleDateFormat sf = new SimpleDateFormat("E, d MMM yy");

@@ -6,15 +6,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
@@ -23,6 +29,9 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 	List<ParseObject> ParseObjectList;
 	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
 													// place
+	//protected int selection;
+	//private ViewHolder holder;
+	//boolean done;
 
 	public FixtureListAdapter(Context context, List<ParseObject> ParseObjectList) {
 		super(context, R.layout.fixture_fragment, ParseObjectList);
@@ -49,10 +58,15 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		ImageView iv_home;
 		ImageView iv_away;
 		TextView tv_time;
+		//LinearLayout lo_home;
+		//LinearLayout lo_draw;
+		//LinearLayout lo_away;
+
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		//done = false;
+		 ViewHolder holder = null;
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
@@ -77,10 +91,16 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 
 			holder.tv_time = (TextView) convertView
 					.findViewById(R.id.textView_time);
+			
+			//holder.lo_home = (LinearLayout) convertView.findViewById(R.id.layout_HomeFixture);
+			//holder.lo_draw = (LinearLayout) convertView.findViewById(R.id.layout_DrawFixture);
+			//holder.lo_away = (LinearLayout) convertView.findViewById(R.id.layout_AwayFixture);
 
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
+		
+		//selection = placedBet(position);
 
 		String home = ParseObjectList.get(position).getString("Home");
 		String away = ParseObjectList.get(position).getString("Away");
@@ -121,8 +141,71 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 			time = "" + hour + "\n" + minute + "\n" + zone;
 
 		holder.tv_time.setText(time);
+		
+		
+		/*LinearLayout myLayout = null;
+		switch (selection) {
+		case -1: break;
+		case 0:
+			myLayout = holder.lo_home;
+			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+			break;
+		case 1:
+			myLayout = holder.lo_draw;
+			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+			break;
+		case 2:
+			myLayout = holder.lo_away;
+			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+			break;
+		}*/
+		
 
 		return convertView;
 	}
+	
+	private int placedBet(int position) {
+		// TODO Auto-generated method stub
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
+		query.whereEqualTo("Match",
+				ParseObjectList.get(position));
+		query.whereEqualTo("User", ParseUser.getCurrentUser());
+		/*query.getFirstInBackground(new GetCallback<ParseObject>() {
+			public void done(ParseObject object, ParseException e) {
+				if (e == null) {
+					selection = object.getInt("BetType"); // get selection to
+															// highlight
+					//layoutHighlight(selection);
+				} else {
+					//tempBoolean = false;
+					selection = -1;
+				}
+			}
+		});*/
+		try {
+			return query.getFirst().getInt("BetType");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	/*protected void layoutHighlight(int selection) {
+		LinearLayout myLayout = null;
+		switch (selection) {
+		case 0:
+			myLayout = holder.lo_home;
+			break;
+		case 1:
+			myLayout = holder.lo_draw;
+			break;
+		case 2:
+			myLayout = holder.lo_away;
+			break;
+		}
+		myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+		
+	}*/
 
 }
