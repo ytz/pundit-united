@@ -58,9 +58,9 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		ImageView iv_home;
 		ImageView iv_away;
 		TextView tv_time;
-		//LinearLayout lo_home;
-		//LinearLayout lo_draw;
-		//LinearLayout lo_away;
+		LinearLayout lo_home;
+		LinearLayout lo_draw;
+		LinearLayout lo_away;
 
 	}
 
@@ -92,9 +92,9 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 			holder.tv_time = (TextView) convertView
 					.findViewById(R.id.textView_time);
 			
-			//holder.lo_home = (LinearLayout) convertView.findViewById(R.id.layout_HomeFixture);
-			//holder.lo_draw = (LinearLayout) convertView.findViewById(R.id.layout_DrawFixture);
-			//holder.lo_away = (LinearLayout) convertView.findViewById(R.id.layout_AwayFixture);
+			holder.lo_home = (LinearLayout) convertView.findViewById(R.id.layout_HomeFixture);
+			holder.lo_draw = (LinearLayout) convertView.findViewById(R.id.layout_DrawFixture);
+			holder.lo_away = (LinearLayout) convertView.findViewById(R.id.layout_AwayFixture);
 
 			convertView.setTag(holder);
 		} else
@@ -142,8 +142,10 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 
 		holder.tv_time.setText(time);
 		
+		//int selection = ParseObjectList.get(position).getParseObject("Bets").getInt("BetType");
+		int selection = ParseObjectList.get(position).getInt("Selection");
 		
-		/*LinearLayout myLayout = null;
+		LinearLayout myLayout = null;
 		switch (selection) {
 		case -1: break;
 		case 0:
@@ -158,7 +160,7 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 			myLayout = holder.lo_away;
 			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
 			break;
-		}*/
+		}
 		
 
 		return convertView;

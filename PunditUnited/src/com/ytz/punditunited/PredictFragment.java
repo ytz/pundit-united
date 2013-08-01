@@ -42,9 +42,10 @@ public class PredictFragment extends Fragment implements
 	private LinearLayout buttonH;
 	private LinearLayout buttonD;
 	private LinearLayout buttonA;
-	private int selection;
+	//private int selection;
 	private View view;
 	private boolean tempBoolean;
+	public static int CHANGE = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,8 +144,9 @@ public class PredictFragment extends Fragment implements
 	}
 
 	private void checkStatus() {
-		if (placedBet() || matchExpire())
-			update();
+		placedBet();
+		//if (placedBet() || matchExpire())
+			//update();
 
 	}
 
@@ -164,10 +166,10 @@ public class PredictFragment extends Fragment implements
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
 			public void done(ParseObject object, ParseException e) {
 				if (e == null) {
-					selection = object.getInt("BetType"); // get selection to
+					int selection = object.getInt("BetType"); // get selection to
 															// highlight
 					tempBoolean = true;
-					update();
+					update(selection);
 				} else {
 					tempBoolean = false;
 				}
@@ -220,14 +222,16 @@ public class PredictFragment extends Fragment implements
 	}*/
 
 	@Override
-	public void update() {
+	public void update(int selection) {
+		placedBet();
 		buttonH.setEnabled(false);
 		buttonD.setEnabled(false);
 		buttonA.setEnabled(false);
-		highlightLayout();
+		highlightLayout(selection);
+		CHANGE = 1;
 	}
 
-	private void highlightLayout() {
+	private void highlightLayout(int selection) {
 		LinearLayout myLayout = null;
 		switch (selection) {
 		case 0:
@@ -245,4 +249,5 @@ public class PredictFragment extends Fragment implements
 		}
 		myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
 	}
+
 }
