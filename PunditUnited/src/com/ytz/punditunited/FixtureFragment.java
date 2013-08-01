@@ -28,7 +28,6 @@ import android.widget.ListView;
 public class FixtureFragment extends ListFragment {
 
 	private List<ParseObject> list;
-	
 
 	private int gameweek;
 	private FixtureListAdapter mAdapter;
@@ -42,7 +41,11 @@ public class FixtureFragment extends ListFragment {
 	public static final String GW = "com.ytz.punditunited.GW";
 	public static final String DATE = "com.ytz.punditunited.DATE";
 	private SeparatedListAdapter adapter;
-	//protected int count;
+	// protected int count;
+
+	private int index;
+
+	private int top;
 
 	/**
 	 * When list is clicked, send match information and open MatchActivity.java
@@ -77,7 +80,7 @@ public class FixtureFragment extends ListFragment {
 		View rootView = inflater.inflate(R.layout.fixture_fragment, container,
 				false);
 		listView = (ListView) rootView.findViewById(android.R.id.list);
-		
+
 		return rootView;
 	}
 
@@ -85,15 +88,14 @@ public class FixtureFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		//getGameweek();
+		// getGameweek();
 	}
-	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 		getGameweek();
 	}
 
@@ -126,7 +128,7 @@ public class FixtureFragment extends ListFragment {
 					list = objects;
 
 					System.out.println("list size " + list.size());
-					//count = 0;
+					// count = 0;
 					getSelection(0);
 
 					/*
@@ -170,10 +172,18 @@ public class FixtureFragment extends ListFragment {
 
 	protected void getSelection(int temp) {
 		final int count = temp;
-		if (count == list.size()) {
+		if (count == list.size() && PredictFragment.CHANGE == 0) {
 			System.out.println("Go to setupadapter");
 			setUpAdapter();
-		} else {
+		}
+		else if (count >= list.size() && PredictFragment.CHANGE == 1) {
+			PredictFragment.CHANGE = 0;	
+			adapter.notifyDataSetChanged();
+			listView.setSelectionFromTop(index, top);
+			return;
+		}else {
+			if (count >= list.size())
+				return;
 			ParseRelation<ParseObject> relation = list.get(count).getRelation(
 					"Bets");
 			ParseQuery<ParseObject> query = relation.getQuery();
@@ -266,16 +276,34 @@ public class FixtureFragment extends ListFragment {
 		SimpleDateFormat sf = new SimpleDateFormat("E, d MMM yy");
 		return sf.format(currDate);
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if (PredictFragment.CHANGE == 1){
-			adapter.notifyDataSetChanged();
-			//getGameweek();
-			PredictFragment.CHANGE = 0;	
+		if (PredictFragment.CHANGE == 1) {
+			System.out.println("START");
+			// int index = listView.getFirstVisiblePosition();
+			// View v = listView.getChildAt(0);
+			// int top = (v == null) ? 0 : v.getTop();
+			// System.out.println("index = " + index + " ,top = " + top);
+			// adapter.notifyDataSetChanged();
+			// getGameweek();
+			getSelection(0);
+			// PredictFragment.CHANGE = 0;
+			// adapter.notifyDataSetChanged();
+			// listView.setSelectionFromTop(index, 0);
+			System.out.println("END");
 		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		index = listView.getFirstVisiblePosition();
+		View v = listView.getChildAt(0);
+		top = (v == null) ? 0 : v.getTop();
+		// store index using shared preferences
 	}
 
 }

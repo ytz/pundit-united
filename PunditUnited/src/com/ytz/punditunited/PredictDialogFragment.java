@@ -110,7 +110,7 @@ public class PredictDialogFragment extends DialogFragment {
 						// User clicked OK button
 						placeBet(spinner.getSelectedItemPosition(), matchID,
 								gameweek);
-						mListener.update(spinner.getSelectedItemPosition());
+						mListener.updateFromDialog(spinner.getSelectedItemPosition());
 
 					}
 				});
@@ -180,7 +180,8 @@ public class PredictDialogFragment extends DialogFragment {
 	 * Interface
 	 */
 	public interface PredictDialogFragmentListener {
-		void update(int selection);
+		//void update(int selection);
+		void updateFromDialog(int selection);
 	}
 
 	/*

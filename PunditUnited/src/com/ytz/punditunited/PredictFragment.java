@@ -45,6 +45,7 @@ public class PredictFragment extends Fragment implements
 	//private int selection;
 	private View view;
 	private boolean tempBoolean;
+	protected int mySelection;
 	public static int CHANGE = 0;
 
 	@Override
@@ -144,9 +145,9 @@ public class PredictFragment extends Fragment implements
 	}
 
 	private void checkStatus() {
-		placedBet();
-		//if (placedBet() || matchExpire())
-			//update();
+		//placedBet();
+		if (placedBet() || matchExpire())
+			update(mySelection);
 
 	}
 
@@ -169,7 +170,7 @@ public class PredictFragment extends Fragment implements
 					int selection = object.getInt("BetType"); // get selection to
 															// highlight
 					tempBoolean = true;
-					update(selection);
+					mySelection = selection;
 				} else {
 					tempBoolean = false;
 				}
@@ -220,15 +221,19 @@ public class PredictFragment extends Fragment implements
 		myLog.saveInBackground();
 		openDialog(type);
 	}*/
-
+	
 	@Override
+	public void updateFromDialog(int selection) {
+		CHANGE = 1;
+		update(selection);
+	}
+
+	
 	public void update(int selection) {
-		placedBet();
 		buttonH.setEnabled(false);
 		buttonD.setEnabled(false);
 		buttonA.setEnabled(false);
 		highlightLayout(selection);
-		CHANGE = 1;
 	}
 
 	private void highlightLayout(int selection) {
@@ -249,5 +254,7 @@ public class PredictFragment extends Fragment implements
 		}
 		myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
 	}
+
+
 
 }
