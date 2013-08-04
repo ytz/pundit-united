@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/menu_leftArrow"
+          android:icon="@drawable/navigation_back"
+          android:title="@string/menu_back"
+          android:showAsAction="ifRoom" />
+    
+    <item android:id="@+id/menu_rightArrow"
+          android:icon="@drawable/navigation_forward"
+          android:title="@string/menu_forward"
+          android:showAsAction="ifRoom" />
+
+</menu>

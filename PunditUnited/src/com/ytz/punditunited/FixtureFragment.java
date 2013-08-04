@@ -27,12 +27,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class FixtureFragment extends ListFragment {
 
 	private List<ParseObject> list;
 
 	private int gameweek;
+	private int maxGameweek = 1;
 	private FixtureListAdapter mAdapter;
 	private ListView listView;
 	public static final String MATCHID = "com.ytz.punditunited.MATCHID";
@@ -109,6 +111,7 @@ public class FixtureFragment extends ListFragment {
 			public void done(ParseObject object, ParseException e) {
 				if (e == null) {
 					gameweek = object.getInt("GW");
+					maxGameweek = object.getInt("MAX_GW");
 					getFixtureList();
 				} else {
 					// something went wrong
@@ -124,7 +127,6 @@ public class FixtureFragment extends ListFragment {
 		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo("GW", gameweek);
 		query.orderByAscending("Date");
-		// query.include("Bets");
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
@@ -132,40 +134,7 @@ public class FixtureFragment extends ListFragment {
 					list = objects;
 
 					System.out.println("list size " + list.size());
-					// count = 0;
 					getSelection(0);
-
-					/*
-					 * // get selection for (a = 0; a < list.size(); a++) {
-					 * System.out.println("a = " + a); temp = list.get(a);
-					 * ParseRelation<ParseObject> relation = list.get(a)
-					 * .getRelation("Bets"); ParseQuery<ParseObject> query =
-					 * relation.getQuery(); query.whereEqualTo("User",
-					 * ParseUser.getCurrentUser());
-					 * query.getFirstInBackground(new GetCallback<ParseObject>()
-					 * {
-					 * 
-					 * @Override public void done(ParseObject object,
-					 * ParseException e) { if (e != null) {
-					 * System.out.println("FOUND"); list.get(a).put("Selection",
-					 * object.getInt("BetType")); // temp.put("Selection", //
-					 * object.getInt("BetType")); } else {
-					 * System.out.println("NOT FOUND");
-					 * list.get(a).put("Selection", -1); //
-					 * temp.put("Selection", -1); } } }); }
-					 */
-
-					/*
-					 * ArrayList<List<ParseObject>> arrayList =
-					 * separateListWithDate(list); adapter = new
-					 * SeparatedListAdapter(getActivity()); for (int i = 0; i <
-					 * arrayList.size(); i++) { adapter.addSection(
-					 * getDateHeader(arrayList.get(i)), new
-					 * FixtureListAdapter(getActivity(), arrayList .get(i))); }
-					 * // mAdapter = new FixtureListAdapter(getActivity(),
-					 * list); // listView.setAdapter(mAdapter);
-					 * listView.setAdapter(adapter);
-					 */
 				} else {
 					System.out.println("Getting fixturelist, Error: "
 							+ e.getMessage());
@@ -179,49 +148,55 @@ public class FixtureFragment extends ListFragment {
 		if (count == list.size() && PredictFragment.CHANGE == 0) {
 			System.out.println("Go to setupadapter");
 			setUpAdapter();
-		}
-		else if (count >= list.size() && PredictFragment.CHANGE == 1) {
-			PredictFragment.CHANGE = 0;	
+		} else if (count >= list.size() && PredictFragment.CHANGE == 1) {
+			PredictFragment.CHANGE = 0;
 			adapter.notifyDataSetChanged();
 			listView.setSelectionFromTop(index, top);
 			return;
-		}else {
+		} else {
 			if (count >= list.size())
 				return;
+
+			/*
+			 * // TRY SPEED THINGS UP for (int i = 0; i < list.size(); i++){
+			 * list.get(i).put("Selection", -1); } setUpAdapter();
+			 */
+
+			// PARSE QUERY SELECTION
 			ParseRelation<ParseObject> relation = list.get(count).getRelation(
 					"Bets");
 			ParseQuery<ParseObject> query = relation.getQuery();
+			//query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
 			query.whereEqualTo("User", ParseUser.getCurrentUser());
-			query.getFirstInBackground(new GetCallback<ParseObject>() {
+			query.findInBackground(new FindCallback<ParseObject>() {
+
 				@Override
-				public void done(ParseObject object, ParseException e) {
-					if (count < list.size()){
-					if (object != null) {
-						System.out.println("FOUND " + count);
-						if (list == null)
-							System.out.println("List is null");
-						if (object == null)
-							System.out.println("Object is null");
+				public void done(List<ParseObject> objects, ParseException e) {
+					if (e == null && objects.size() != 0) {
 						list.get(count).put("Selection",
-								object.getInt("BetType"));
-						getSelection(count+1);
-						// temp.put("Selection",
-						// object.getInt("BetType"));
+								objects.get(0).getInt("BetType"));
+						getSelection(count + 1);
 					} else {
-						System.out.println("NOT FOUND " + count);
-						//System.out.println(e.getMessage());
 						list.get(count).put("Selection", -1);
-						getSelection(count+1);
-						// temp.put("Selection", -1);
+						getSelection(count + 1);
 					}
+
 				}
-				}
+
 			});
+
+			/*
+			 * query.getFirstInBackground(new GetCallback<ParseObject>() {
+			 * 
+			 * @Override public void done(ParseObject object, ParseException e)
+			 * { if (count < list.size()){ if (object != null) {
+			 * list.get(count).put("Selection", object.getInt("BetType"));
+			 * getSelection(count+1); } else { list.get(count).put("Selection",
+			 * -1); getSelection(count+1); } } } });
+			 */
 		} // else
 
 	}
-
-	
 
 	private void setUpAdapter() {
 		ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
@@ -311,30 +286,45 @@ public class FixtureFragment extends ListFragment {
 		top = (v == null) ? 0 : v.getTop();
 		// store index using shared preferences
 	}
-	
+
+	/***
+	 * Action Bar - Nav Buttons
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
-		 switch (item.getItemId()) 
-		   {
-		     case R.id.menu_leftArrow:
-		        //Intent intent = new Intent(this, ProfileActivity.class);
-		        //intent.putExtra(MYUSERID, ParseUser.getCurrentUser().getObjectId());
-		        //startActivity(intent);
-		        return true;
-		     case R.id.menu_rightArrow:
-		    	 return true;
-		     default:
-		        return super.onOptionsItemSelected(item);
-		   }
+		switch (item.getItemId()) {
+		case R.id.menu_leftArrow:
+			if (gameweek > 1) {
+				gameweek--;
+				getFixtureList();
+			} else {
+				Toast.makeText(getActivity(), "No more previous gameweeek",
+						Toast.LENGTH_SHORT).show();
+			}
+			return true;
+		case R.id.menu_rightArrow:
+			if (gameweek > maxGameweek)
+				Toast.makeText(getActivity(), "No more gameweek to display",
+						Toast.LENGTH_SHORT).show();
+			else {
+				gameweek++;
+				getFixtureList();
+			}
+
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
+	/**
+	 * Action Bar Buttons
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fixture, menu);
 
 	}
-	
-	
 
 }
