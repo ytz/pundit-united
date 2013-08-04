@@ -165,18 +165,21 @@ public class MainActivity extends FragmentActivity {
 
 	}
 	
-
-	@Override
+	
+	/**
+	 * Action Bar Buttons
+	 */
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
+	}*/
 	
 	/**
-	 * Action Bar - Profile
+	 * Action Bar - My Profile
 	 */
-	@Override
+	/*@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
 	   switch (item.getItemId()) 
@@ -189,7 +192,7 @@ public class MainActivity extends FragmentActivity {
 	     default:
 	        return super.onOptionsItemSelected(item);
 	   }
-	}
+	}*/
 	
 	/**
 	 * Stores fbId and Name to Parse's database when user uses the app

@@ -139,14 +139,16 @@ public class PredictFragment extends Fragment implements
 			}
 		});
 
-		checkStatus();
+		//checkStatus();
+		placedBet();
 
 		return view;
 	}
 
 	private void checkStatus() {
-		//placedBet();
-		if (placedBet() || matchExpire())
+		//if (placedBet() || matchExpire())
+			//update(mySelection);
+		if (tempBoolean || matchExpire())
 			update(mySelection);
 
 	}
@@ -158,7 +160,7 @@ public class PredictFragment extends Fragment implements
 		return false;
 	}
 
-	private boolean placedBet() {
+	private void placedBet() {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 		query.whereEqualTo("Match",
@@ -171,12 +173,14 @@ public class PredictFragment extends Fragment implements
 															// highlight
 					tempBoolean = true;
 					mySelection = selection;
+					checkStatus();
 				} else {
 					tempBoolean = false;
+					checkStatus();
 				}
 			}
 		});
-		return tempBoolean;
+		//return tempBoolean;
 	}
 
 	/**

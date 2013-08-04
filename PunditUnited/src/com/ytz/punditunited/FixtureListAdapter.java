@@ -29,9 +29,10 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 	List<ParseObject> ParseObjectList;
 	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
 													// place
-	//protected int selection;
-	//private ViewHolder holder;
-	//boolean done;
+
+	// protected int selection;
+	// private ViewHolder holder;
+	// boolean done;
 
 	public FixtureListAdapter(Context context, List<ParseObject> ParseObjectList) {
 		super(context, R.layout.fixture_fragment, ParseObjectList);
@@ -61,12 +62,13 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		LinearLayout lo_home;
 		LinearLayout lo_draw;
 		LinearLayout lo_away;
-
+		TextView tv_H;
+		TextView tv_D;
+		TextView tv_A;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		//done = false;
-		 ViewHolder holder = null;
+		ViewHolder holder = null;
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
@@ -91,17 +93,26 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 
 			holder.tv_time = (TextView) convertView
 					.findViewById(R.id.textView_time);
+
+			holder.lo_home = (LinearLayout) convertView
+					.findViewById(R.id.layout_HomeFixture);
+			holder.lo_draw = (LinearLayout) convertView
+					.findViewById(R.id.layout_DrawFixture);
+			holder.lo_away = (LinearLayout) convertView
+					.findViewById(R.id.layout_AwayFixture);
 			
-			holder.lo_home = (LinearLayout) convertView.findViewById(R.id.layout_HomeFixture);
-			holder.lo_draw = (LinearLayout) convertView.findViewById(R.id.layout_DrawFixture);
-			holder.lo_away = (LinearLayout) convertView.findViewById(R.id.layout_AwayFixture);
+			holder.tv_H = (TextView) convertView
+					.findViewById(R.id.textView_H);
+			holder.tv_D = (TextView) convertView
+					.findViewById(R.id.textView_D);
+			holder.tv_A = (TextView) convertView
+					.findViewById(R.id.textView_A);
 
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
-		
-		//selection = placedBet(position);
 
+		// WORK STARTS HERE
 		String home = ParseObjectList.get(position).getString("Home");
 		String away = ParseObjectList.get(position).getString("Away");
 		Date date = ParseObjectList.get(position).getDate("Date");
@@ -109,19 +120,18 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		Calendar matchday = Calendar.getInstance(TimeZone.getDefault());
 		matchday.setTime(date);
 
+		// SELECTION
+		int selection = ParseObjectList.get(position).getInt("Selection");
+
+		// TEAM NAMES
 		holder.tv_homeTeam.setText(ClubHelper.getShortName(home));
 		holder.tv_awayTeam.setText(ClubHelper.getShortName(away));
 
-		holder.tv_homeOdds.setText(""
-				+ df.format(ParseObjectList.get(position).getNumber("H_odds")));
-		holder.tv_awayOdds.setText(""
-				+ df.format(ParseObjectList.get(position).getNumber("A_odds")));
-		holder.tv_drawOdds.setText(""
-				+ df.format(ParseObjectList.get(position).getNumber("D_odds")));
-
+		// TEAM IMAGE
 		holder.iv_home.setImageResource(ClubHelper.getImageResource(home));
 		holder.iv_away.setImageResource(ClubHelper.getImageResource(away));
 
+		// TIME
 		String zone;
 		int hour = matchday.get(Calendar.HOUR_OF_DAY);
 		if (hour > 12) {
@@ -141,49 +151,84 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 			time = "" + hour + "\n" + minute + "\n" + zone;
 
 		holder.tv_time.setText(time);
-		
-		//int selection = ParseObjectList.get(position).getParseObject("Bets").getInt("BetType");
-		int selection = ParseObjectList.get(position).getInt("Selection");
-		
-		LinearLayout myLayout = null;
-		switch (selection) {
-		case -1: break;
-		case 0:
-			myLayout = holder.lo_home;
-			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
-			break;
-		case 1:
-			myLayout = holder.lo_draw;
-			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
-			break;
-		case 2:
-			myLayout = holder.lo_away;
-			myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
-			break;
+
+		if (ParseObjectList.get(position).getNumber("H_Goal") == null) {
+
+			// ODDS
+			holder.tv_homeOdds.setText(""
+					+ df.format(ParseObjectList.get(position).getNumber(
+							"H_odds")));
+			holder.tv_awayOdds.setText(""
+					+ df.format(ParseObjectList.get(position).getNumber(
+							"A_odds")));
+			holder.tv_drawOdds.setText(""
+					+ df.format(ParseObjectList.get(position).getNumber(
+							"D_odds")));
+
+			// HIGHLIGHT
+
+			LinearLayout myLayout = null;
+			switch (selection) {
+			case -1:
+				break;
+			case 0:
+				myLayout = holder.lo_home;
+				myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+				break;
+			case 1:
+				myLayout = holder.lo_draw;
+				myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+				break;
+			case 2:
+				myLayout = holder.lo_away;
+				myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+				break;
+			}
 		}
 		
+		// FORMAT WHEN THERE IS SCORE
+		else{
+			// CLEAR H,D,A
+			holder.lo_home.removeView(holder.tv_H);
+			holder.lo_draw.removeView(holder.tv_D);
+			holder.lo_away.removeView(holder.tv_A);
+			
+			// SCORE
+			holder.tv_homeOdds.setText("" + ParseObjectList.get(position).getNumber("H_Goal") + ":" + ParseObjectList.get(position).getNumber("A_Goal"));
+			
+			// SELECTION
+			switch (selection) {
+			case -1:
+				break;
+			case 0:
+				holder.tv_drawOdds.setText("H");
+				break;
+			case 1:
+				holder.tv_drawOdds.setText("D");
+				break;
+			case 2:
+				holder.tv_drawOdds.setText("A");
+				break;
+			}
+			
+
+		}
 
 		return convertView;
 	}
-	
+
 	private int placedBet(int position) {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
-		query.whereEqualTo("Match",
-				ParseObjectList.get(position));
+		query.whereEqualTo("Match", ParseObjectList.get(position));
 		query.whereEqualTo("User", ParseUser.getCurrentUser());
-		/*query.getFirstInBackground(new GetCallback<ParseObject>() {
-			public void done(ParseObject object, ParseException e) {
-				if (e == null) {
-					selection = object.getInt("BetType"); // get selection to
-															// highlight
-					//layoutHighlight(selection);
-				} else {
-					//tempBoolean = false;
-					selection = -1;
-				}
-			}
-		});*/
+		/*
+		 * query.getFirstInBackground(new GetCallback<ParseObject>() { public
+		 * void done(ParseObject object, ParseException e) { if (e == null) {
+		 * selection = object.getInt("BetType"); // get selection to //
+		 * highlight //layoutHighlight(selection); } else { //tempBoolean =
+		 * false; selection = -1; } } });
+		 */
 		try {
 			return query.getFirst().getInt("BetType");
 		} catch (ParseException e) {
@@ -193,21 +238,13 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		}
 	}
 
-	/*protected void layoutHighlight(int selection) {
-		LinearLayout myLayout = null;
-		switch (selection) {
-		case 0:
-			myLayout = holder.lo_home;
-			break;
-		case 1:
-			myLayout = holder.lo_draw;
-			break;
-		case 2:
-			myLayout = holder.lo_away;
-			break;
-		}
-		myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
-		
-	}*/
+	/*
+	 * protected void layoutHighlight(int selection) { LinearLayout myLayout =
+	 * null; switch (selection) { case 0: myLayout = holder.lo_home; break; case
+	 * 1: myLayout = holder.lo_draw; break; case 2: myLayout = holder.lo_away;
+	 * break; } myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
+	 * 
+	 * }
+	 */
 
 }

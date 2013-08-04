@@ -21,6 +21,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -93,8 +96,9 @@ public class FixtureFragment extends ListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+
+		setHasOptionsMenu(true); // ActionBar buttons appear
 
 		getGameweek();
 	}
@@ -217,6 +221,8 @@ public class FixtureFragment extends ListFragment {
 
 	}
 
+	
+
 	private void setUpAdapter() {
 		ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
 		adapter = new SeparatedListAdapter(getActivity());
@@ -305,5 +311,30 @@ public class FixtureFragment extends ListFragment {
 		top = (v == null) ? 0 : v.getTop();
 		// store index using shared preferences
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		 switch (item.getItemId()) 
+		   {
+		     case R.id.menu_leftArrow:
+		        //Intent intent = new Intent(this, ProfileActivity.class);
+		        //intent.putExtra(MYUSERID, ParseUser.getCurrentUser().getObjectId());
+		        //startActivity(intent);
+		        return true;
+		     case R.id.menu_rightArrow:
+		    	 return true;
+		     default:
+		        return super.onOptionsItemSelected(item);
+		   }
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.fixture, menu);
+
+	}
+	
+	
 
 }

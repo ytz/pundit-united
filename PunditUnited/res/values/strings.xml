@@ -8,5 +8,7 @@
     <string name="menu_profile">My Profile</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="menu_forward">Next Gameweek</string>
+    <string name="menu_back">Previous Gameweek</string>
 
 </resources>

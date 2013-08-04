@@ -253,6 +253,8 @@ containing a value of this type.
         public static final int logo_swansea=0x7f020046;
         public static final int logo_united=0x7f020047;
         public static final int logo_villa=0x7f020048;
+        public static final int navigation_back=0x7f020049;
+        public static final int navigation_forward=0x7f02004a;
     }
     public static final class id {
         public static final int com_facebook_login_activity_progress_bar=0x7f040006;
@@ -279,23 +281,25 @@ containing a value of this type.
         public static final int imageView_historyAway=0x7f040031;
         public static final int imageView_historyHome=0x7f04002f;
         public static final int imageView_home=0x7f040020;
-        public static final int imageView_pAway=0x7f040040;
+        public static final int imageView_pAway=0x7f040041;
         public static final int imageView_pHome=0x7f040039;
-        public static final int imageView_profilePic=0x7f04004a;
+        public static final int imageView_profilePic=0x7f04004c;
         public static final int large=0x7f040002;
         public static final int layout_AwayFixture=0x7f04002a;
-        public static final int layout_AwayPredict=0x7f04003e;
+        public static final int layout_AwayPredict=0x7f04003f;
         public static final int layout_DrawFixture=0x7f040027;
         public static final int layout_DrawPredict=0x7f04003b;
         public static final int layout_HomeFixture=0x7f040024;
         public static final int layout_HomePredict=0x7f040037;
-        public static final int linearlayout_Abutton=0x7f040046;
-        public static final int linearlayout_Dbutton=0x7f040044;
-        public static final int linearlayout_Hbutton=0x7f040042;
+        public static final int linearlayout_Abutton=0x7f040048;
+        public static final int linearlayout_Dbutton=0x7f040045;
+        public static final int linearlayout_Hbutton=0x7f040043;
         public static final int linearlayout_gw=0x7f04002d;
         public static final int linearlayout_time=0x7f04001e;
         public static final int list_header_title=0x7f040035;
-        public static final int menu_profile=0x7f04004c;
+        public static final int menu_leftArrow=0x7f04004e;
+        public static final int menu_profile=0x7f040050;
+        public static final int menu_rightArrow=0x7f04004f;
         public static final int normal=0x7f040001;
         public static final int pager=0x7f040003;
         public static final int picker_subtitle=0x7f040015;
@@ -304,15 +308,17 @@ containing a value of this type.
         public static final int small=0x7f040000;
         public static final int spinner_dialog=0x7f04001a;
         public static final int textView1=0x7f040036;
-        public static final int textView2=0x7f040045;
-        public static final int textView3=0x7f040047;
-        public static final int textView4=0x7f040043;
-        public static final int textView5=0x7f040025;
-        public static final int textView6=0x7f04003c;
-        public static final int textView7=0x7f040028;
-        public static final int textView8=0x7f040048;
-        public static final int textView9=0x7f04002b;
-        public static final int textView_AfullName=0x7f04003f;
+        public static final int textView2=0x7f040046;
+        public static final int textView3=0x7f040049;
+        public static final int textView4=0x7f040044;
+        public static final int textView5=0x7f04003c;
+        public static final int textView6=0x7f04003d;
+        public static final int textView7=0x7f040047;
+        public static final int textView8=0x7f04004a;
+        public static final int textView_A=0x7f04002b;
+        public static final int textView_AfullName=0x7f040040;
+        public static final int textView_D=0x7f040028;
+        public static final int textView_H=0x7f040025;
         public static final int textView_HfullName=0x7f040038;
         public static final int textView_away=0x7f040023;
         public static final int textView_awayOdds=0x7f04002c;
@@ -325,11 +331,11 @@ containing a value of this type.
         public static final int textView_historyScore=0x7f040033;
         public static final int textView_home=0x7f040021;
         public static final int textView_homeOdds=0x7f040026;
-        public static final int textView_name=0x7f04004b;
-        public static final int textView_pAwayOdds=0x7f040041;
-        public static final int textView_pDrawOdds=0x7f04003d;
+        public static final int textView_name=0x7f04004d;
+        public static final int textView_pAwayOdds=0x7f040042;
+        public static final int textView_pDrawOdds=0x7f04003e;
         public static final int textView_pHomeOdds=0x7f04003a;
-        public static final int textView_rankNumber=0x7f040049;
+        public static final int textView_rankNumber=0x7f04004b;
         public static final int textView_seekText=0x7f04001b;
         public static final int textView_time=0x7f04001f;
     }
@@ -361,7 +367,8 @@ containing a value of this type.
         public static final int social_fragment=0x7f030018;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
+        public static final int fixture=0x7f090000;
+        public static final int main=0x7f090001;
     }
     public static final class string {
         public static final int action_settings=0x7f05001a;
@@ -394,6 +401,8 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f050009;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f05000a;
         public static final int hello_world=0x7f05001b;
+        public static final int menu_back=0x7f050021;
+        public static final int menu_forward=0x7f050020;
         public static final int menu_profile=0x7f05001d;
         public static final int ok=0x7f05001e;
     }
