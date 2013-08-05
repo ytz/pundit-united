@@ -12,6 +12,7 @@ import com.parse.SaveCallback;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -124,6 +125,12 @@ public class PredictDialogFragment extends DialogFragment {
 		return builder.create();
 	}
 
+	/**
+	 * Save bet selection to 'History' in Parse Database
+	 * @param type (position from spinner)
+	 * @param id (matchID)
+	 * @param gameweek
+	 */
 	private void placeBet(int type, String id, int gameweek) {
 		System.out.println("IN PLACEBET!");
 		ParseUser currentUser = ParseUser.getCurrentUser();
@@ -135,6 +142,7 @@ public class PredictDialogFragment extends DialogFragment {
 		myLog.put("GW", gameweek);
 		myLog.put("BetAmount", Integer.parseInt(seekText.getText().toString()));
 		myLog.put("Comment", comment.getText().toString());
+		myLog.put("inPhoneData", true); // selection is saved in phone
 		myLog.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
@@ -145,6 +153,13 @@ public class PredictDialogFragment extends DialogFragment {
 				match.saveInBackground();
 			}
 		});
+		
+		// Store selection inside user's phone
+		SharedPreferences selection = getActivity().getSharedPreferences("Selection", 0);
+		SharedPreferences.Editor editor = selection.edit();
+		editor.putInt(id, type);
+		// Commit the edits!
+		editor.commit();
 
 		// openDialog(type);
 	}

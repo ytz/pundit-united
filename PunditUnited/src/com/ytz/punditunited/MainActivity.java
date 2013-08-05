@@ -1,11 +1,14 @@
 package com.ytz.punditunited;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,11 +21,14 @@ import android.view.MenuItem;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity {
@@ -38,35 +44,40 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// PARSE SETUP
-		Parse.initialize(this, "gEPGfVTzUnO1j0Z2XdWuFfnrAkJ21DI5cW3X6vJp", "Bjpe0LDwNNUfmOwuiXrbylHeSSOSUAXgRrBudu24"); 
+		Parse.initialize(this, "gEPGfVTzUnO1j0Z2XdWuFfnrAkJ21DI5cW3X6vJp",
+				"Bjpe0LDwNNUfmOwuiXrbylHeSSOSUAXgRrBudu24");
 		ParseAnalytics.trackAppOpened(getIntent()); // track statistics
-		
+
 		// PARSE FB
 		ParseFacebookUtils.initialize(getString(R.string.app_id));
-		
-		ParseFacebookUtils.logIn(this, new LogInCallback() {
-			  @Override
-			  public void done(ParseUser user, ParseException err) {
-			    if (user == null) {
-			      Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-			    } else if (user.isNew()) {
-			      Log.d("MyApp", "User signed up and logged in through Facebook!");
-			      getFacebookIdInBackground();
-			    } else {
-			      Log.d("MyApp", "User logged in through Facebook!");
-			    }
-			  }
-			});
 
+		ParseFacebookUtils.logIn(this, new LogInCallback() {
+			@Override
+			public void done(ParseUser user, ParseException err) {
+				if (user == null) {
+					Log.d("MyApp",
+							"Uh oh. The user cancelled the Facebook login.");
+				} else if (user.isNew()) {
+					Log.d("MyApp",
+							"User signed up and logged in through Facebook!");
+					getFacebookIdInBackground();
+				} else {
+					Log.d("MyApp", "User logged in through Facebook!");
+				}
+			}
+		});
+
+		// Get Selection
+		getSelection();
 
 		// the page adapter contains all the fragment registrations
 		mAdapter = new MyAdapter(getSupportFragmentManager());
 		mPager = (ViewPager) findViewById(R.id.pager);
 		// set the contents of the ViewPager
 		mPager.setAdapter(mAdapter);
-		
+
 		// Cache page?
 		mPager.setOffscreenPageLimit(NUM_ITEMS);
 
@@ -83,15 +94,47 @@ public class MainActivity extends FragmentActivity {
 		setupABar();
 	}
 
+	private void getSelection() {
+		final SharedPreferences selection = getSharedPreferences("Selection", 0);
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
+		query.whereEqualTo("User", ParseUser.getCurrentUser());
+		if (selection.getAll().size() != 0)
+			query.whereEqualTo("inPhoneData", false);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					storeSelection(objects, selection);
+				} else {
+					Log.d("score", "Error: " + e.getMessage());
+				}
+
+			}
+		});
+	}
+
+	private void storeSelection(List<ParseObject> objects,
+			SharedPreferences selection) {
+		SharedPreferences.Editor editor = selection.edit();
+
+		for (int i = 0; i < objects.size(); i++) {
+			editor.putInt(
+					((ParseObject) objects.get(i).get("Match")).getObjectId(),
+					objects.get(i).getInt("BetType"));
+		}
+		// Commit the edits!
+		editor.commit();
+		
+		System.out.println("test + " + selection.getInt("whCjIdy0kW", -1));
+	}
+
 	/**
-	 * PARSE
-	 * =====
-	 * For Facebook's "Single sign-on"
+	 * PARSE ===== For Facebook's "Single sign-on"
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	  super.onActivityResult(requestCode, resultCode, data);
-	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
+		ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
 	}
 
 	public static class MyAdapter extends FragmentPagerAdapter {
@@ -164,52 +207,47 @@ public class MainActivity extends FragmentActivity {
 		aBar.addTab(aBar.newTab().setText("Me").setTabListener(tabListener));
 
 	}
-	
-	
+
 	/**
 	 * Action Bar Buttons
 	 */
-	/*@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}*/
-	
+	/*
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) { // Inflate the
+	 * menu; this adds items to the action bar if it is present.
+	 * getMenuInflater().inflate(R.menu.main, menu); return true; }
+	 */
+
 	/**
 	 * Action Bar - My Profile
 	 */
-	/*@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-	   switch (item.getItemId()) 
-	   {
-	     case R.id.menu_profile:
-	        Intent intent = new Intent(this, ProfileActivity.class);
-	        intent.putExtra(MYUSERID, ParseUser.getCurrentUser().getObjectId());
-	        startActivity(intent);
-	        return true;
-	     default:
-	        return super.onOptionsItemSelected(item);
-	   }
-	}*/
-	
+	/*
+	 * @Override public boolean onOptionsItemSelected(MenuItem item) { switch
+	 * (item.getItemId()) { case R.id.menu_profile: Intent intent = new
+	 * Intent(this, ProfileActivity.class); intent.putExtra(MYUSERID,
+	 * ParseUser.getCurrentUser().getObjectId()); startActivity(intent); return
+	 * true; default: return super.onOptionsItemSelected(item); } }
+	 */
+
 	/**
-	 * Stores fbId and Name to Parse's database when user uses the app
-	 * for the first time
+	 * Stores fbId and Name to Parse's database when user uses the app for the
+	 * first time
 	 */
 	private static void getFacebookIdInBackground() {
-		  Request.executeMeRequestAsync(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
-		    @Override
-		    public void onCompleted(GraphUser user, Response response) {
-		      if (user != null) {
-		        ParseUser.getCurrentUser().put("fbId", user.getId());
-		        ParseUser.getCurrentUser().put("Name", user.getName());
-		        ParseUser.getCurrentUser().put("Points", 100); // initial points
-		        ParseUser.getCurrentUser().saveInBackground();
-		      }
-		    }
-		  });
-		}
+		Request.executeMeRequestAsync(ParseFacebookUtils.getSession(),
+				new Request.GraphUserCallback() {
+					@Override
+					public void onCompleted(GraphUser user, Response response) {
+						if (user != null) {
+							ParseUser.getCurrentUser()
+									.put("fbId", user.getId());
+							ParseUser.getCurrentUser().put("Name",
+									user.getName());
+							ParseUser.getCurrentUser().put("Points", 100); // initial
+																			// points
+							ParseUser.getCurrentUser().saveInBackground();
+						}
+					}
+				});
+	}
 
 }

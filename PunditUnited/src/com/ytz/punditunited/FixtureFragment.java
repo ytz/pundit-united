@@ -134,7 +134,8 @@ public class FixtureFragment extends ListFragment {
 					list = objects;
 
 					System.out.println("list size " + list.size());
-					getSelection(0);
+					//getSelection(0);
+					setUpAdapter();
 				} else {
 					System.out.println("Getting fixturelist, Error: "
 							+ e.getMessage());

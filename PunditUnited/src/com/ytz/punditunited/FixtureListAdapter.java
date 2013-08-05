@@ -14,6 +14,7 @@ import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,7 +122,10 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		matchday.setTime(date);
 
 		// SELECTION
-		int selection = ParseObjectList.get(position).getInt("Selection");
+		//int selection = ParseObjectList.get(position).getInt("Selection");
+		SharedPreferences preference = context.getSharedPreferences("Selection", 0);
+		int selection = preference.getInt(ParseObjectList.get(position).getObjectId(), -1);
+
 
 		// TEAM NAMES
 		holder.tv_homeTeam.setText(ClubHelper.getShortName(home));
