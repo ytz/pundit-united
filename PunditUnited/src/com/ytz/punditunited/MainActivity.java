@@ -1,5 +1,6 @@
 package com.ytz.punditunited;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.os.Bundle;
@@ -22,9 +23,11 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -35,7 +38,7 @@ public class MainActivity extends FragmentActivity {
 
 	static final int NUM_ITEMS = 4;
 	MyAdapter mAdapter;
-	ViewPager mPager;
+	static ViewPager mPager;
 	public static String MYUSERID = "com.ytz.punditunited.MainActivity.MYUSERID";
 
 	// http://stackoverflow.com/questions/16091704/android-scrollable-tabs-swipe-state-when-swiping
@@ -70,7 +73,15 @@ public class MainActivity extends FragmentActivity {
 		});
 
 		// Get Selection
-		getSelection();
+		ParseCloud.callFunctionInBackground("updateScore", null, new FunctionCallback<String>() {
+			  public void done(String result, ParseException e) {
+			    if (e == null) {
+			      getSelection();
+			    }
+			  }
+			});
+		//getSelection();
+		//getBetWon();
 
 		// the page adapter contains all the fragment registrations
 		mAdapter = new MyAdapter(getSupportFragmentManager());
@@ -94,19 +105,59 @@ public class MainActivity extends FragmentActivity {
 		setupABar();
 	}
 
+	private void getAmtWon() {
+		final SharedPreferences amtWon = getSharedPreferences("AmtWon", 0);
+		if (amtWon.getAll().size() == 0) {
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
+			query.whereEqualTo("User", ParseUser.getCurrentUser());
+			if (amtWon.getAll().size() != 0) // phone has some data
+				query.whereEqualTo("wonInPhone", false);
+			query.findInBackground(new FindCallback<ParseObject>() {
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					if (e == null) {
+						storeAmtWon(objects, amtWon);
+					} else {
+						Log.d("score", "getAmtWon: " + e.getMessage());
+					}
+
+				}
+			});
+		}
+
+	}
+
+	protected void storeAmtWon(List<ParseObject> objects,
+			SharedPreferences amtWon) {
+		SharedPreferences.Editor amt_editor = amtWon.edit();
+		for (int i = 0; i < objects.size(); i++) {
+			amt_editor.putInt(
+					((ParseObject) objects.get(i).get("Match")).getObjectId(),
+					objects.get(i).getInt("WinAmount"));
+		}
+
+		// Commit the edits!
+		amt_editor.commit();
+
+	}
+
+	/**
+	 * Get list of ParseObject (History)
+	 */
 	private void getSelection() {
 		final SharedPreferences selection = getSharedPreferences("Selection", 0);
+		//final SharedPreferences amtBet = getSharedPreferences("AmtBet", 0);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 		query.whereEqualTo("User", ParseUser.getCurrentUser());
-		if (selection.getAll().size() != 0)
-			query.whereEqualTo("inPhoneData", false);
+		if (selection.getAll().size() != 0) // phone has some data
+			query.whereEqualTo("selectionInPhone", false);
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
 					storeSelection(objects, selection);
 				} else {
-					Log.d("score", "Error: " + e.getMessage());
+					Log.d("score", "getSelection: " + e.getMessage());
 				}
 
 			}
@@ -115,17 +166,22 @@ public class MainActivity extends FragmentActivity {
 
 	private void storeSelection(List<ParseObject> objects,
 			SharedPreferences selection) {
-		SharedPreferences.Editor editor = selection.edit();
+		SharedPreferences.Editor select_editor = selection.edit();
+		//SharedPreferences.Editor amt_editor = amtBet.edit();
 
 		for (int i = 0; i < objects.size(); i++) {
-			editor.putInt(
+			select_editor.putInt(
 					((ParseObject) objects.get(i).get("Match")).getObjectId(),
 					objects.get(i).getInt("BetType"));
+			//amt_editor.putInt(
+					//((ParseObject) objects.get(i).get("Match")).getObjectId(),
+					//objects.get(i).getInt("BetAmount"));
 		}
 		// Commit the edits!
-		editor.commit();
+		select_editor.commit();
+		//amt_editor.commit();
 		
-		System.out.println("test + " + selection.getInt("whCjIdy0kW", -1));
+		getAmtWon();
 	}
 
 	/**
@@ -171,6 +227,21 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	private String getTitle(int position) {
+		switch (position) {
+		case 0:
+			return "PU";
+		case 1:
+			return "Gameweek " + FixtureFragment.gameweek;
+		case 2:
+			return "PU2";
+		case 3:
+			return "PU3";
+		}
+		return null;
+
+	}
+
 	// http://developer.android.com/training/implementing-navigation/lateral.html#swipe-tabs
 	// http://ucla.jamesyxu.com/?p=278
 	// w/o this, no tab
@@ -186,6 +257,7 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
 				mPager.setCurrentItem(tab.getPosition());
+				getActionBar().setTitle(getTitle(tab.getPosition()));
 			}
 
 			@Override

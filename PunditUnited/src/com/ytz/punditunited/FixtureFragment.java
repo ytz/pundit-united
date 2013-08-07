@@ -14,6 +14,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +37,7 @@ public class FixtureFragment extends ListFragment {
 
 	private List<ParseObject> list;
 
-	private int gameweek;
+	public static int gameweek;
 	private int maxGameweek = 1;
 	private FixtureListAdapter mAdapter;
 	private ListView listView;
@@ -101,7 +105,7 @@ public class FixtureFragment extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true); // ActionBar buttons appear
-
+		
 		getGameweek();
 	}
 
@@ -112,6 +116,7 @@ public class FixtureFragment extends ListFragment {
 				if (e == null) {
 					gameweek = object.getInt("GW");
 					maxGameweek = object.getInt("MAX_GW");
+					//createActionBarSpinner();
 					getFixtureList();
 				} else {
 					// something went wrong
@@ -120,6 +125,47 @@ public class FixtureFragment extends ListFragment {
 				}
 			}
 		});
+	}
+
+
+	/**
+	 * @return String[] for Action Bar 'Gameweek' Spinner
+	 */
+	private String[] createGWStringArray(){
+		String[] myArray = new String[maxGameweek];
+		for (int i = 0; i < maxGameweek; i++){
+			myArray[i] = "Gameweek " + (i+1);
+		}
+		return myArray;
+	}
+	
+	/**
+	 * http://wptrafficanalyzer.in/blog/adding-drop-down-navigation-to-action-bar-in-android/
+	 */
+	@SuppressLint("NewApi")
+	protected void createActionBarSpinner() {
+		/** Create an array adapter to populate dropdownlist */
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, createGWStringArray());
+ 
+        /** Enabling dropdown list navigation for the action bar */
+        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        
+        /** Defining Navigation listener */
+        OnNavigationListener navigationListener = new OnNavigationListener() {
+ 
+            @Override
+            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                gameweek = itemPosition + 1;
+                getFixtureList();
+                return true;
+            }
+        };
+ 
+        /** Setting dropdown items and item navigation listener for the actionbar */
+        getActivity().getActionBar().setListNavigationCallbacks(adapter, navigationListener);
+        
+
+		
 	}
 
 	private void getFixtureList() {
@@ -167,7 +213,6 @@ public class FixtureFragment extends ListFragment {
 			ParseRelation<ParseObject> relation = list.get(count).getRelation(
 					"Bets");
 			ParseQuery<ParseObject> query = relation.getQuery();
-			//query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
 			query.whereEqualTo("User", ParseUser.getCurrentUser());
 			query.findInBackground(new FindCallback<ParseObject>() {
 
@@ -186,15 +231,6 @@ public class FixtureFragment extends ListFragment {
 
 			});
 
-			/*
-			 * query.getFirstInBackground(new GetCallback<ParseObject>() {
-			 * 
-			 * @Override public void done(ParseObject object, ParseException e)
-			 * { if (count < list.size()){ if (object != null) {
-			 * list.get(count).put("Selection", object.getInt("BetType"));
-			 * getSelection(count+1); } else { list.get(count).put("Selection",
-			 * -1); getSelection(count+1); } } } });
-			 */
 		} // else
 
 	}
@@ -261,20 +297,11 @@ public class FixtureFragment extends ListFragment {
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		if (PredictFragment.CHANGE == 1) {
 			System.out.println("START");
-			// int index = listView.getFirstVisiblePosition();
-			// View v = listView.getChildAt(0);
-			// int top = (v == null) ? 0 : v.getTop();
-			// System.out.println("index = " + index + " ,top = " + top);
-			// adapter.notifyDataSetChanged();
-			// getGameweek();
-			getSelection(0);
-			// PredictFragment.CHANGE = 0;
-			// adapter.notifyDataSetChanged();
-			// listView.setSelectionFromTop(index, 0);
+			//getSelection(0);
+			setUpAdapter();
 			System.out.println("END");
 		}
 	}
@@ -291,6 +318,7 @@ public class FixtureFragment extends ListFragment {
 	/***
 	 * Action Bar - Nav Buttons
 	 */
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
@@ -298,6 +326,7 @@ public class FixtureFragment extends ListFragment {
 		case R.id.menu_leftArrow:
 			if (gameweek > 1) {
 				gameweek--;
+				getActivity().getActionBar().setTitle("Gameweek " + gameweek);
 				getFixtureList();
 			} else {
 				Toast.makeText(getActivity(), "No more previous gameweeek",
@@ -310,6 +339,7 @@ public class FixtureFragment extends ListFragment {
 						Toast.LENGTH_SHORT).show();
 			else {
 				gameweek++;
+				getActivity().getActionBar().setTitle("Gameweek " + gameweek);
 				getFixtureList();
 			}
 

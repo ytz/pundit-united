@@ -83,24 +83,35 @@ public class PredictDialogFragment extends DialogFragment {
 		comment = (EditText) layout.findViewById(R.id.editText_dialogComment);
 
 		SeekBar seekbar = (SeekBar) layout.findViewById(R.id.seekBar_dialog);
-		seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
+		// if no points
+		if (totalPoints <= 0) {
+			seekbar.setEnabled(false);
+			seekText.setText("0");
+			builder.create().getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+		}
 
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// positionSeekBar(progress);
-				// seekText.setText("" + progress);
-				int display = ((int) ((progress / 100.0) * (totalPoints - 5)) / 5 * 5 + 5);
-				seekText.setText("" + display);
-			}
-		});
+		else {
+
+			seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+				}
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress,
+						boolean fromUser) {
+					// positionSeekBar(progress);
+					// seekText.setText("" + progress);
+					int display = ((int) ((progress / 100.0) * (totalPoints - 5)) / 5 * 5 + 5);
+					seekText.setText("" + display);
+				}
+			});
+		}
 
 		builder.setView(layout); // impt!
 
@@ -111,7 +122,8 @@ public class PredictDialogFragment extends DialogFragment {
 						// User clicked OK button
 						placeBet(spinner.getSelectedItemPosition(), matchID,
 								gameweek);
-						mListener.updateFromDialog(spinner.getSelectedItemPosition());
+						mListener.updateFromDialog(spinner
+								.getSelectedItemPosition());
 
 					}
 				});
@@ -127,8 +139,11 @@ public class PredictDialogFragment extends DialogFragment {
 
 	/**
 	 * Save bet selection to 'History' in Parse Database
-	 * @param type (position from spinner)
-	 * @param id (matchID)
+	 * 
+	 * @param type
+	 *            (position from spinner)
+	 * @param id
+	 *            (matchID)
 	 * @param gameweek
 	 */
 	private void placeBet(int type, String id, int gameweek) {
@@ -142,20 +157,27 @@ public class PredictDialogFragment extends DialogFragment {
 		myLog.put("GW", gameweek);
 		myLog.put("BetAmount", Integer.parseInt(seekText.getText().toString()));
 		myLog.put("Comment", comment.getText().toString());
-		myLog.put("inPhoneData", true); // selection is saved in phone
+		myLog.put("selectionInPhone", true); // selection is saved in phone
+		myLog.put("wonInPhone", true); // AmtWon is saved in phone
 		myLog.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
-				ParseObject match = ParseObject
-						.createWithoutData("Fixture", matchID);
+				ParseObject match = ParseObject.createWithoutData("Fixture",
+						matchID);
 				ParseRelation<ParseObject> relation = match.getRelation("Bets");
 				relation.add(myLog);
 				match.saveInBackground();
 			}
 		});
-		
+
+		// Deduct points
+		ParseUser.getCurrentUser().increment("Points",
+				-1 * Integer.parseInt(seekText.getText().toString()));
+		ParseUser.getCurrentUser().saveInBackground();
+
 		// Store selection inside user's phone
-		SharedPreferences selection = getActivity().getSharedPreferences("Selection", 0);
+		SharedPreferences selection = getActivity().getSharedPreferences(
+				"Selection", 0);
 		SharedPreferences.Editor editor = selection.edit();
 		editor.putInt(id, type);
 		// Commit the edits!
@@ -195,19 +217,8 @@ public class PredictDialogFragment extends DialogFragment {
 	 * Interface
 	 */
 	public interface PredictDialogFragmentListener {
-		//void update(int selection);
+		// void update(int selection);
 		void updateFromDialog(int selection);
 	}
 
-	/*
-	 * @Override public void onItemSelected(AdapterView<?> main, View view, int
-	 * position, long Id) {
-	 * 
-	 * String item = main.getItemAtPosition(position).toString();
-	 * 
-	 * Toast.makeText(main.getContext(), "You selected Month is: " + item,
-	 * Toast.LENGTH_LONG).show();
-	 * 
-	 * }
-	 */
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -16,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +32,6 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 	List<ParseObject> ParseObjectList;
 	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
 													// place
-
-	// protected int selection;
-	// private ViewHolder holder;
-	// boolean done;
 
 	public FixtureListAdapter(Context context, List<ParseObject> ParseObjectList) {
 		super(context, R.layout.fixture_fragment, ParseObjectList);
@@ -101,13 +99,10 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 					.findViewById(R.id.layout_DrawFixture);
 			holder.lo_away = (LinearLayout) convertView
 					.findViewById(R.id.layout_AwayFixture);
-			
-			holder.tv_H = (TextView) convertView
-					.findViewById(R.id.textView_H);
-			holder.tv_D = (TextView) convertView
-					.findViewById(R.id.textView_D);
-			holder.tv_A = (TextView) convertView
-					.findViewById(R.id.textView_A);
+
+			holder.tv_H = (TextView) convertView.findViewById(R.id.textView_H);
+			holder.tv_D = (TextView) convertView.findViewById(R.id.textView_D);
+			holder.tv_A = (TextView) convertView.findViewById(R.id.textView_A);
 
 			convertView.setTag(holder);
 		} else
@@ -122,10 +117,11 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		matchday.setTime(date);
 
 		// SELECTION
-		//int selection = ParseObjectList.get(position).getInt("Selection");
-		SharedPreferences preference = context.getSharedPreferences("Selection", 0);
-		int selection = preference.getInt(ParseObjectList.get(position).getObjectId(), -1);
-
+		// int selection = ParseObjectList.get(position).getInt("Selection");
+		SharedPreferences preference = context.getSharedPreferences(
+				"Selection", 0);
+		int selection = preference.getInt(ParseObjectList.get(position)
+				.getObjectId(), -1);
 
 		// TEAM NAMES
 		holder.tv_homeTeam.setText(ClubHelper.getShortName(home));
@@ -156,6 +152,7 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 
 		holder.tv_time.setText(time);
 
+		// IF THERE IS NO SCORE
 		if (ParseObjectList.get(position).getNumber("H_Goal") == null) {
 
 			// ODDS
@@ -189,17 +186,21 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 				break;
 			}
 		}
-		
+
 		// FORMAT WHEN THERE IS SCORE
-		else{
+		else {
 			// CLEAR H,D,A
 			holder.lo_home.removeView(holder.tv_H);
 			holder.lo_draw.removeView(holder.tv_D);
 			holder.lo_away.removeView(holder.tv_A);
-			
+
 			// SCORE
-			holder.tv_homeOdds.setText("" + ParseObjectList.get(position).getNumber("H_Goal") + ":" + ParseObjectList.get(position).getNumber("A_Goal"));
-			
+			int hGoal = ParseObjectList.get(position).getNumber("H_Goal")
+					.intValue();
+			int aGoal = ParseObjectList.get(position).getNumber("A_Goal")
+					.intValue();
+			holder.tv_homeOdds.setText("" + hGoal + ":" + aGoal);
+
 			// SELECTION
 			switch (selection) {
 			case -1:
@@ -215,6 +216,76 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 				break;
 			}
 			
+			/*
+			// IF THERE IS A SELECTION
+			if (selection != -1) {
+				SharedPreferences amtWon = context.getSharedPreferences(
+						"AmtWon", 0);
+				int won = amtWon.getInt(ParseObjectList.get(position)
+						.getObjectId(), -1);
+				// IF NO RESULT IN PHONE DATA
+				if (won == -1) {
+					int result;
+					if (hGoal > aGoal)
+						result = 0;
+					else if (hGoal < aGoal)
+						result = 2;
+					else
+						result = 1;
+					SharedPreferences amtBet = context.getSharedPreferences(
+							"AmtBet", 0);
+					if (selection == result) {
+						switch (selection) {
+						case 0:
+							won = ParseObjectList.get(position)
+									.getNumber("H_odds").intValue()
+									* amtBet.getInt(
+											ParseObjectList.get(position)
+													.getObjectId(), -1);
+							break;
+						case 1:
+							won = ParseObjectList.get(position)
+									.getNumber("D_odds").intValue()
+									* amtBet.getInt(
+											ParseObjectList.get(position)
+													.getObjectId(), -1);
+							break;
+						case 2:
+							won = ParseObjectList.get(position)
+									.getNumber("A_odds").intValue()
+									* amtBet.getInt(
+											ParseObjectList.get(position)
+													.getObjectId(), -1);
+							break;
+						default:
+							break;
+						} // switch
+					} // if
+					else{
+						won = -1 * amtBet.getInt(
+								ParseObjectList.get(position)
+								.getObjectId(), -1);
+					}
+					amtWon.edit().putInt(ParseObjectList.get(position)
+								.getObjectId(), won);
+					final int win = won;
+					ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
+					query.whereEqualTo("User", ParseUser.getCurrentUser());
+					query.whereEqualTo("Match", ParseObjectList.get(position));
+					query.findInBackground(new FindCallback<ParseObject>() {
+					    @Override
+						public void done(List<ParseObject> historyList, ParseException e) {
+					        if (e == null) {
+					            historyList.get(0).add("Check", true);
+					            historyList.get(0).add("WinAmount", win);
+					        } else {
+					            Log.d("score", "Error: " + e.getMessage());
+					        }
+					    }
+					});
+				} // if
+				holder.tv_awayOdds.setText("" + won);
+			}*/
 
 		}
 
