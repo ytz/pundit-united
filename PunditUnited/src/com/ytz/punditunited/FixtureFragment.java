@@ -50,7 +50,6 @@ public class FixtureFragment extends ListFragment {
 	public static final String GW = "com.ytz.punditunited.GW";
 	public static final String DATE = "com.ytz.punditunited.DATE";
 	private SeparatedListAdapter adapter;
-	// protected int count;
 
 	private int index;
 
@@ -190,7 +189,7 @@ public class FixtureFragment extends ListFragment {
 		});
 	}
 
-	protected void getSelection(int temp) {
+	/*protected void getSelection(int temp) {
 		final int count = temp;
 		if (count == list.size() && PredictFragment.CHANGE == 0) {
 			System.out.println("Go to setupadapter");
@@ -203,11 +202,6 @@ public class FixtureFragment extends ListFragment {
 		} else {
 			if (count >= list.size())
 				return;
-
-			/*
-			 * // TRY SPEED THINGS UP for (int i = 0; i < list.size(); i++){
-			 * list.get(i).put("Selection", -1); } setUpAdapter();
-			 */
 
 			// PARSE QUERY SELECTION
 			ParseRelation<ParseObject> relation = list.get(count).getRelation(
@@ -233,7 +227,7 @@ public class FixtureFragment extends ListFragment {
 
 		} // else
 
-	}
+	}*/
 
 	private void setUpAdapter() {
 		ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);

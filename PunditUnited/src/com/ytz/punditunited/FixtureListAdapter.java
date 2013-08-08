@@ -216,76 +216,16 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 				break;
 			}
 			
-			/*
-			// IF THERE IS A SELECTION
-			if (selection != -1) {
-				SharedPreferences amtWon = context.getSharedPreferences(
-						"AmtWon", 0);
-				int won = amtWon.getInt(ParseObjectList.get(position)
-						.getObjectId(), -1);
-				// IF NO RESULT IN PHONE DATA
-				if (won == -1) {
-					int result;
-					if (hGoal > aGoal)
-						result = 0;
-					else if (hGoal < aGoal)
-						result = 2;
-					else
-						result = 1;
-					SharedPreferences amtBet = context.getSharedPreferences(
-							"AmtBet", 0);
-					if (selection == result) {
-						switch (selection) {
-						case 0:
-							won = ParseObjectList.get(position)
-									.getNumber("H_odds").intValue()
-									* amtBet.getInt(
-											ParseObjectList.get(position)
-													.getObjectId(), -1);
-							break;
-						case 1:
-							won = ParseObjectList.get(position)
-									.getNumber("D_odds").intValue()
-									* amtBet.getInt(
-											ParseObjectList.get(position)
-													.getObjectId(), -1);
-							break;
-						case 2:
-							won = ParseObjectList.get(position)
-									.getNumber("A_odds").intValue()
-									* amtBet.getInt(
-											ParseObjectList.get(position)
-													.getObjectId(), -1);
-							break;
-						default:
-							break;
-						} // switch
-					} // if
-					else{
-						won = -1 * amtBet.getInt(
-								ParseObjectList.get(position)
-								.getObjectId(), -1);
-					}
-					amtWon.edit().putInt(ParseObjectList.get(position)
-								.getObjectId(), won);
-					final int win = won;
-					ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
-					query.whereEqualTo("User", ParseUser.getCurrentUser());
-					query.whereEqualTo("Match", ParseObjectList.get(position));
-					query.findInBackground(new FindCallback<ParseObject>() {
-					    @Override
-						public void done(List<ParseObject> historyList, ParseException e) {
-					        if (e == null) {
-					            historyList.get(0).add("Check", true);
-					            historyList.get(0).add("WinAmount", win);
-					        } else {
-					            Log.d("score", "Error: " + e.getMessage());
-					        }
-					    }
-					});
-				} // if
-				holder.tv_awayOdds.setText("" + won);
-			}*/
+			// Show Amount Won/lost, if there is
+			final SharedPreferences amtWon = context.getSharedPreferences("AmtWon", 0);
+			Float amount = amtWon.getFloat(ParseObjectList.get(position).getObjectId(), -1);
+			if (amount != -1){
+				String sign = "";
+				if (amount > 0)
+					sign = "+";
+				holder.tv_awayOdds.setText(sign + df.format(amount));
+			}
+
 
 		}
 

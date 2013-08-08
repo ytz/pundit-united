@@ -80,8 +80,7 @@ public class MainActivity extends FragmentActivity {
 			    }
 			  }
 			});
-		//getSelection();
-		//getBetWon();
+
 
 		// the page adapter contains all the fragment registrations
 		mAdapter = new MyAdapter(getSupportFragmentManager());
@@ -107,7 +106,6 @@ public class MainActivity extends FragmentActivity {
 
 	private void getAmtWon() {
 		final SharedPreferences amtWon = getSharedPreferences("AmtWon", 0);
-		if (amtWon.getAll().size() == 0) {
 			ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 			query.whereEqualTo("User", ParseUser.getCurrentUser());
 			if (amtWon.getAll().size() != 0) // phone has some data
@@ -123,15 +121,13 @@ public class MainActivity extends FragmentActivity {
 
 				}
 			});
-		}
-
 	}
 
 	protected void storeAmtWon(List<ParseObject> objects,
 			SharedPreferences amtWon) {
 		SharedPreferences.Editor amt_editor = amtWon.edit();
 		for (int i = 0; i < objects.size(); i++) {
-			amt_editor.putInt(
+			amt_editor.putFloat(
 					((ParseObject) objects.get(i).get("Match")).getObjectId(),
 					objects.get(i).getInt("WinAmount"));
 		}
@@ -146,7 +142,6 @@ public class MainActivity extends FragmentActivity {
 	 */
 	private void getSelection() {
 		final SharedPreferences selection = getSharedPreferences("Selection", 0);
-		//final SharedPreferences amtBet = getSharedPreferences("AmtBet", 0);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 		query.whereEqualTo("User", ParseUser.getCurrentUser());
 		if (selection.getAll().size() != 0) // phone has some data
@@ -167,19 +162,14 @@ public class MainActivity extends FragmentActivity {
 	private void storeSelection(List<ParseObject> objects,
 			SharedPreferences selection) {
 		SharedPreferences.Editor select_editor = selection.edit();
-		//SharedPreferences.Editor amt_editor = amtBet.edit();
 
 		for (int i = 0; i < objects.size(); i++) {
 			select_editor.putInt(
 					((ParseObject) objects.get(i).get("Match")).getObjectId(),
 					objects.get(i).getInt("BetType"));
-			//amt_editor.putInt(
-					//((ParseObject) objects.get(i).get("Match")).getObjectId(),
-					//objects.get(i).getInt("BetAmount"));
 		}
 		// Commit the edits!
 		select_editor.commit();
-		//amt_editor.commit();
 		
 		getAmtWon();
 	}

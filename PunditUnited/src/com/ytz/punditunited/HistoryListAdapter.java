@@ -1,9 +1,11 @@
 package com.ytz.punditunited;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 
 	private Context context;
 	private List<ParseObject> ParseObjectList;
+	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
+	// place
 
 	public HistoryListAdapter(Context context, List<ParseObject> ParseObjectList) {
 		super(context, R.layout.fixture_fragment, ParseObjectList);
@@ -81,8 +85,28 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 				+ ParseObjectList.get(position).getNumber("GW"));
 		holder.tv_homeTeam.setText("" + ClubHelper.getShortName(home));
 		holder.tv_awayTeam.setText("" + ClubHelper.getShortName(away));
-		// holder.tv_score.setText();
-		// holder.tv_points.setText();
+
+		// Score
+		if (ParseObjectList.get(position).getParseObject("Match")
+				.getNumber("H_Goal") != null) {
+			int homeGoal = ParseObjectList.get(position)
+					.getParseObject("Match").getNumber("H_Goal").intValue();
+			int awayGoal = ParseObjectList.get(position)
+					.getParseObject("Match").getNumber("A_Goal").intValue();
+			holder.tv_score.setText(homeGoal + " : " + awayGoal);
+		}
+
+		// Points
+		final SharedPreferences amtWon = context.getSharedPreferences("AmtWon",
+				0);
+		float amount = amtWon.getFloat(ParseObjectList.get(position).getParseObject("Match").getObjectId(),
+				-1);
+		if (amount != -1) {
+			String sign = "";
+			if (amount > 0)
+				sign = "+";
+			holder.tv_points.setText(sign + df.format(amount));
+		}
 
 		holder.iv_home.setImageResource(ClubHelper.getImageResource(home));
 		holder.iv_away.setImageResource(ClubHelper.getImageResource(away));
