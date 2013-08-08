@@ -36,7 +36,7 @@ import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity {
 
-	static final int NUM_ITEMS = 4;
+	static final int NUM_ITEMS = 3;
 	MyAdapter mAdapter;
 	static ViewPager mPager;
 	public static String MYUSERID = "com.ytz.punditunited.MainActivity.MYUSERID";
@@ -206,9 +206,9 @@ public class MainActivity extends FragmentActivity {
 			case 2:
 				fragment = new RankFragment();
 				break;
-			case 3:
-				fragment = new MeFragment();
-				break;
+			//case 3:
+				//fragment = new MeFragment();
+				//break;
 			default:
 				fragment = null;
 				break;
@@ -225,8 +225,8 @@ public class MainActivity extends FragmentActivity {
 			return "Gameweek " + FixtureFragment.gameweek;
 		case 2:
 			return "PU2";
-		case 3:
-			return "PU3";
+		//case 3:
+			//return "PU3";
 		}
 		return null;
 
@@ -266,7 +266,7 @@ public class MainActivity extends FragmentActivity {
 		aBar.addTab(aBar.newTab().setText("Fixture")
 				.setTabListener(tabListener));
 		aBar.addTab(aBar.newTab().setText("Rank").setTabListener(tabListener));
-		aBar.addTab(aBar.newTab().setText("Me").setTabListener(tabListener));
+		//aBar.addTab(aBar.newTab().setText("Me").setTabListener(tabListener));
 
 	}
 
