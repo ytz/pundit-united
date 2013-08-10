@@ -67,7 +67,10 @@ public class FacebookImageLoader {
 
 	public FacebookImageLoader(Context context) {
 		mContext = context;
-		mMaxDimension = getMaxThumbnailDimension(mContext, false);
+		//mMaxDimension = getMaxThumbnailDimension(mContext, false);
+		mMaxDimension = getMaxThumbnailDimension(mContext, true);
+		System.out.println("mMaxDimension = " + mMaxDimension );
+		mMaxDimension = 320;
 	}
 
 	public void load(String filename, ImageView imageView) {
@@ -305,6 +308,8 @@ public class FacebookImageLoader {
 		// somewhere in the vicinity of 'maxDimension' pixels.
 		int scaler = 1;
 		int maxSide = Math.max(opts.outWidth, opts.outHeight);
+		
+		System.out.println("maxSide = " + maxSide);
 
 		if (maxSide > maxDimension) {
 			float ratio = (float) maxSide / (float) maxDimension;
@@ -350,10 +355,14 @@ public class FacebookImageLoader {
 		float newHeight = bitmap.getHeight();
 		float ratio = 0;
 		
+		System.out.println("maxSide = " + maxSide);
+
+		
 		if (maxSide > maxDimension) {
 			ratio = (float) maxDimension / (float) maxSide;
 			newWidth *= ratio;
 			newHeight *= ratio;
+			System.out.println("newWidth = " + newWidth + " , newHeight = " + newHeight);
 		}
 		
 		try {
@@ -395,6 +404,8 @@ public class FacebookImageLoader {
 			calculateDensityDpi(context);
 		}
 		
+		System.out.println("mDensityDpi = " + mDensityDpi );
+		
 		switch (mDensityDpi) {
 			case DENSITY_LOW:
 				return (larger) ? 64 : 48;
@@ -424,7 +435,10 @@ public class FacebookImageLoader {
 		int reflectedDensityDpi = DENSITY_MEDIUM;
 
 		try {
-			reflectedDensityDpi = DisplayMetrics.class.getDeclaredField("mDensityDpi").getInt(metrics);
+			//reflectedDensityDpi = DisplayMetrics.class.getDeclaredField("mDensityDpi").getInt(metrics);
+			// https://github.com/htormey/AndroidFacebookImageCache/issues/1
+			//reflectedDensityDpi = DisplayMetrics.class.getDeclaredField("densityDpi").getInt(metrics);
+			reflectedDensityDpi = DisplayMetrics.class.getDeclaredField("DENSITY_DEFAULT").getInt(metrics);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -44,6 +44,8 @@ public class RankFragment extends ListFragment {
 
 	private void getUserList() {
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
+		query.orderByDescending("Points");
 		query.findInBackground(new FindCallback<ParseUser>() {
 
 			@Override

@@ -297,9 +297,9 @@ containing a value of this type.
         public static final int linearlayout_gw=0x7f04002d;
         public static final int linearlayout_time=0x7f04001e;
         public static final int list_header_title=0x7f040035;
-        public static final int menu_leftArrow=0x7f04004e;
-        public static final int menu_profile=0x7f040050;
-        public static final int menu_rightArrow=0x7f04004f;
+        public static final int menu_leftArrow=0x7f04004f;
+        public static final int menu_profile=0x7f040051;
+        public static final int menu_rightArrow=0x7f040050;
         public static final int normal=0x7f040001;
         public static final int pager=0x7f040003;
         public static final int picker_subtitle=0x7f040015;
@@ -335,6 +335,7 @@ containing a value of this type.
         public static final int textView_pAwayOdds=0x7f040042;
         public static final int textView_pDrawOdds=0x7f04003e;
         public static final int textView_pHomeOdds=0x7f04003a;
+        public static final int textView_rankBy=0x7f04004e;
         public static final int textView_rankNumber=0x7f04004b;
         public static final int textView_seekText=0x7f04001b;
         public static final int textView_time=0x7f04001f;

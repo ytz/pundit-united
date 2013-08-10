@@ -127,46 +127,6 @@ public class FixtureFragment extends ListFragment {
 	}
 
 
-	/**
-	 * @return String[] for Action Bar 'Gameweek' Spinner
-	 */
-	private String[] createGWStringArray(){
-		String[] myArray = new String[maxGameweek];
-		for (int i = 0; i < maxGameweek; i++){
-			myArray[i] = "Gameweek " + (i+1);
-		}
-		return myArray;
-	}
-	
-	/**
-	 * http://wptrafficanalyzer.in/blog/adding-drop-down-navigation-to-action-bar-in-android/
-	 */
-	@SuppressLint("NewApi")
-	protected void createActionBarSpinner() {
-		/** Create an array adapter to populate dropdownlist */
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, createGWStringArray());
- 
-        /** Enabling dropdown list navigation for the action bar */
-        getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        
-        /** Defining Navigation listener */
-        OnNavigationListener navigationListener = new OnNavigationListener() {
- 
-            @Override
-            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                gameweek = itemPosition + 1;
-                getFixtureList();
-                return true;
-            }
-        };
- 
-        /** Setting dropdown items and item navigation listener for the actionbar */
-        getActivity().getActionBar().setListNavigationCallbacks(adapter, navigationListener);
-        
-
-		
-	}
-
 	private void getFixtureList() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Fixture");
 		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
@@ -328,7 +288,7 @@ public class FixtureFragment extends ListFragment {
 			}
 			return true;
 		case R.id.menu_rightArrow:
-			if (gameweek > maxGameweek)
+			if (gameweek >= maxGameweek)
 				Toast.makeText(getActivity(), "No more gameweek to display",
 						Toast.LENGTH_SHORT).show();
 			else {

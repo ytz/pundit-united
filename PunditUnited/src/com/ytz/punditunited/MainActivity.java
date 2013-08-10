@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.model.GraphUser;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
@@ -47,7 +48,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
 		// PARSE SETUP
 		Parse.initialize(this, "gEPGfVTzUnO1j0Z2XdWuFfnrAkJ21DI5cW3X6vJp",
 				"Bjpe0LDwNNUfmOwuiXrbylHeSSOSUAXgRrBudu24");

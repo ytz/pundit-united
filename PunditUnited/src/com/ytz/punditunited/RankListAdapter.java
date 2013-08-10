@@ -3,6 +3,7 @@ package com.ytz.punditunited;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,6 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.parse.ParseUser;
 
 public class RankListAdapter extends ArrayAdapter<ParseUser> {
@@ -23,12 +27,17 @@ public class RankListAdapter extends ArrayAdapter<ParseUser> {
 	private Context context;
 	private List<ParseUser> ParseUserList;
 	private FacebookImageLoader mImageLoader;
+	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
+													// place
+	private static final String BASE_URL = "http://graph.facebook.com/";
+	// http://stackoverflow.com/questions/11743768/how-to-get-facebook-profile-large-square-picture
+	private static final String PICTURE = "/picture?width=100&height=100";
 
 	public RankListAdapter(Context context, List<ParseUser> list) {
 		super(context, R.layout.rank_fragment, list);
 		this.context = context;
 		this.ParseUserList = list;
-		mImageLoader = new FacebookImageLoader(context);
+		//mImageLoader = new FacebookImageLoader(context);
 	}
 
 	@Override
@@ -45,6 +54,7 @@ public class RankListAdapter extends ArrayAdapter<ParseUser> {
 		TextView tv_number;
 		ImageView iv_profilePic;
 		TextView tv_name;
+		TextView tv_rankBy;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -60,34 +70,24 @@ public class RankListAdapter extends ArrayAdapter<ParseUser> {
 					.findViewById(R.id.imageView_profilePic);
 			holder.tv_name = (TextView) convertView
 					.findViewById(R.id.textView_name);
+			holder.tv_rankBy = (TextView) convertView
+					.findViewById(R.id.textView_rankBy);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
-		// TEXT
+		// TEXT (Rank, Name, Points)
 		int rank = position + 1;
 		holder.tv_number.setText("" + rank);
 		holder.tv_name.setText(ParseUserList.get(position).getString("Name"));
-		
+		holder.tv_rankBy.setText(""
+				+ df.format(ParseUserList.get(position).getNumber("Points")
+						.floatValue())); // by points first
+
 		// IMAGE
 		String id = ParseUserList.get(position).getString("fbId");
-		mImageLoader.load(id, holder.iv_profilePic);
-		/*URL img_value = null;
-		try {
-			img_value = new URL("http://graph.facebook.com/" + id
-					+ "/picture");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Bitmap mIcon1 = null;
-		try {
-			mIcon1 = BitmapFactory.decodeStream(img_value.openConnection()
-					.getInputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		holder.iv_profilePic.setImageBitmap(mIcon1);*/
+		String url = BASE_URL + id + PICTURE;
+		// mImageLoader.load(id, holder.iv_profilePic);
+		ImageLoader.getInstance().displayImage(url, holder.iv_profilePic); // Default options will be used
 
 		return convertView;
 	}
