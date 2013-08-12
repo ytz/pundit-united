@@ -158,6 +158,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_not_connected_text_color=0x7f060003;
     }
     public static final class dimen {
+        public static final int UI_element_margin=0x7f07000d;
         /**  Default screen margins, per the Android Design guidelines. 
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
@@ -165,7 +166,6 @@ containing a value of this type.
     
          */
         public static final int activity_horizontal_margin=0x7f07000c;
-        public static final int activity_vertical_margin=0x7f07000d;
         public static final int com_facebook_loginview_height=0x7f070007;
         public static final int com_facebook_loginview_padding_bottom=0x7f070005;
         public static final int com_facebook_loginview_padding_left=0x7f070002;

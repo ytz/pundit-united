@@ -69,11 +69,9 @@ public class PredictDialogFragment extends DialogFragment {
 
 		// Inflater
 		View layout = inflater.inflate(R.layout.dialog_predict, null);
-		// = (TextView) layout.findViewById(R.id.tag_error_message);
 		spinner = (Spinner) layout.findViewById(R.id.spinner_dialog);
 		addItemOnSpinner();
-		// spinner.setOnItemSelectedListener(getActivity());
-		// spinner.getSelectedItemPosition()
+
 
 		totalPoints = ParseUser.getCurrentUser().getInt("Points");
 		seekText = (TextView) layout.findViewById(R.id.textView_seekText);
@@ -84,7 +82,7 @@ public class PredictDialogFragment extends DialogFragment {
 
 		SeekBar seekbar = (SeekBar) layout.findViewById(R.id.seekBar_dialog);
 
-		// if no points
+		// if no points, disable button
 		if (totalPoints <= 0) {
 			seekbar.setEnabled(false);
 			seekText.setText("0");
@@ -105,8 +103,6 @@ public class PredictDialogFragment extends DialogFragment {
 				@Override
 				public void onProgressChanged(SeekBar seekBar, int progress,
 						boolean fromUser) {
-					// positionSeekBar(progress);
-					// seekText.setText("" + progress);
 					int display = ((int) ((progress / 100.0) * (totalPoints - 5)) / 5 * 5 + 5);
 					seekText.setText("" + display);
 				}
@@ -185,17 +181,6 @@ public class PredictDialogFragment extends DialogFragment {
 
 		// openDialog(type);
 	}
-
-	/*
-	 * protected void positionSeekBar(int progress) { String what_to_say =
-	 * String.valueOf(how_many); fade_text.setText(what_to_say); int
-	 * seek_label_pos = (((fade_seek.getRight() - fade_seek.getLeft()) *
-	 * fade_seek.getProgress()) / fade_seek.getMax()) + fade_seek.getLeft(); if
-	 * (how_many <=9) { fade_text.setX(seek_label_pos - 6); } else {
-	 * fade_text.setX(seek_label_pos - 11); }
-	 * 
-	 * }
-	 */
 
 	/**
 	 * Populate Spinner with the 3 items
