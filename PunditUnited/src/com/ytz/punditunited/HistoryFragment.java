@@ -50,7 +50,6 @@ public class HistoryFragment extends ListFragment {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		//ParseUser currentUser = ParseUser.getCurrentUser();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo("User", currentUser);

@@ -3,9 +3,8 @@
 	android:id="@+id/list_header_title"
 	android:layout_width="fill_parent" 
 	android:layout_height="wrap_content"
-	android:paddingTop="2dip"
-	android:paddingBottom="2dip"
-	android:paddingLeft="5dip"
+	android:paddingTop="4dip"
+	android:paddingBottom="4dip"
+	android:paddingLeft="16dip"
 	style="?android:attr/listSeparatorTextViewStyle"
-	android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin" />
+/>

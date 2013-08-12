@@ -2,14 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:layout_marginBottom="@dimen/UI_element_margin"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin" >
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/UI_element_margin"
+    android:orientation="horizontal" >
 
     <LinearLayout
         android:id="@+id/linearlayout_time"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.01"
         android:gravity="center_vertical"
         android:orientation="vertical" >
@@ -19,14 +24,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="7" />
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.1"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <ImageView
@@ -40,14 +46,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LIV" />
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-         android:layout_weight="0.1"
-         android:gravity="center"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginTop="@dimen/UI_element_margin"
+        android:layout_weight="0.1"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <ImageView
@@ -67,6 +74,8 @@
         android:id="@+id/layout_HomeFixture"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="vertical" >
@@ -82,18 +91,19 @@
             android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:text="1.60" />
-
     </LinearLayout>
-    
+
     <View
-    android:layout_height="fill_parent"
-    android:layout_width="1dp"
-    android:background="@android:color/darker_gray"/>
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:id="@+id/layout_DrawFixture"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="vertical" >
@@ -109,18 +119,20 @@
             android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:text="2.80" />
-
     </LinearLayout>
-    
+
     <View
-    android:layout_height="fill_parent"
-    android:layout_width="1dp"
-    android:background="@android:color/darker_gray"/>
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:id="@+id/layout_AwayFixture"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="vertical" >
@@ -136,7 +148,6 @@
             android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:text="" />
-
     </LinearLayout>
 
 </LinearLayout>

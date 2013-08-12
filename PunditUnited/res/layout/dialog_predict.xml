@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"  >
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal" >
 
         <TextView
@@ -16,20 +18,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Selection: "
+            android:layout_marginBottom="@dimen/UI_element_margin"
             android:layout_marginRight="@dimen/UI_element_margin"
             android:layout_marginTop="@dimen/UI_element_margin"
-            android:layout_marginBottom="@dimen/UI_element_margin" />
+            android:text="Selection: " />
 
         <Spinner
             android:id="@+id/spinner_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/UI_element_margin"
             android:layout_marginLeft="@dimen/UI_element_margin"
-            android:layout_marginTop="@dimen/UI_element_margin"
-            android:layout_marginBottom="@dimen/UI_element_margin" />
-
+            android:layout_marginTop="@dimen/UI_element_margin" />
     </LinearLayout>
 
     <TextView
@@ -37,26 +38,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text=""
+        android:layout_marginBottom="@dimen/UI_element_margin"
         android:layout_marginTop="@dimen/UI_element_margin"
-        android:layout_marginBottom="@dimen/UI_element_margin" />
+        android:text="" />
 
     <SeekBar
         android:id="@+id/seekBar_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/UI_element_margin"
-        android:layout_marginBottom="@dimen/UI_element_margin" />
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/UI_element_margin" />
 
     <EditText
         android:id="@+id/editText_dialogComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:hint="Any comments?"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/UI_element_margin"
-        android:layout_marginBottom="@dimen/UI_element_margin" >
+        android:ems="10"
+        android:hint="Any comments?"
+        android:inputType="textMultiLine" >
 
         <requestFocus />
     </EditText>

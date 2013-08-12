@@ -117,7 +117,6 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		matchday.setTime(date);
 
 		// SELECTION
-		// int selection = ParseObjectList.get(position).getInt("Selection");
 		SharedPreferences preference = context.getSharedPreferences(
 				"Selection", 0);
 		int selection = preference.getInt(ParseObjectList.get(position)
@@ -237,13 +236,6 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
 		query.whereEqualTo("Match", ParseObjectList.get(position));
 		query.whereEqualTo("User", ParseUser.getCurrentUser());
-		/*
-		 * query.getFirstInBackground(new GetCallback<ParseObject>() { public
-		 * void done(ParseObject object, ParseException e) { if (e == null) {
-		 * selection = object.getInt("BetType"); // get selection to //
-		 * highlight //layoutHighlight(selection); } else { //tempBoolean =
-		 * false; selection = -1; } } });
-		 */
 		try {
 			return query.getFirst().getInt("BetType");
 		} catch (ParseException e) {
