@@ -198,7 +198,7 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 					.intValue();
 			int aGoal = ParseObjectList.get(position).getNumber("A_Goal")
 					.intValue();
-			holder.tv_homeOdds.setText("" + hGoal + ":" + aGoal);
+			holder.tv_homeOdds.setText("" + hGoal + " : " + aGoal);
 
 			// SELECTION
 			switch (selection) {

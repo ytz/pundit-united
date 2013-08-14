@@ -49,6 +49,10 @@ public class FixtureFragment extends ListFragment {
 	public static final String A_ODDS = "com.ytz.punditunited.A_ODDS";
 	public static final String GW = "com.ytz.punditunited.GW";
 	public static final String DATE = "com.ytz.punditunited.DATE";
+	public static final String H_PERCENT = "com.ytz.punditunited.H_PERCENT";
+	public static final String D_PERCENT = "com.ytz.punditunited.D_PERCENT";
+	public static final String A_PERCENT = "com.ytz.punditunited.A_PERCENT";
+
 	private SeparatedListAdapter adapter;
 
 	private int index;
@@ -78,6 +82,25 @@ public class FixtureFragment extends ListFragment {
 				((ParseObject) adapter.getItem(position)).getInt("GW"));
 		intent.putExtra(DATE, ((ParseObject) adapter.getItem(position))
 				.getDate("Date").getTime());
+		
+		int total_predict = ((ParseObject) adapter.getItem(position)).getInt("Predict_Total");
+		int H_predict = ((ParseObject) adapter.getItem(position)).getInt("Predict_H");
+		int D_predict = ((ParseObject) adapter.getItem(position)).getInt("Predict_D");
+		int A_predict = ((ParseObject) adapter.getItem(position)).getInt("Predict_A");
+		
+		float H_percent, D_percent, A_percent;
+		
+		if (total_predict == 0)
+			H_percent = D_percent = A_percent = 0;
+		else{
+			H_percent = (H_predict / total_predict) * 100;
+			D_percent = (D_predict / total_predict) * 100;
+			A_percent = (A_predict / total_predict) * 100;
+		}
+		
+		intent.putExtra(H_PERCENT, H_percent);
+		intent.putExtra(D_PERCENT, D_percent);
+		intent.putExtra(A_PERCENT, A_percent);
 
 		startActivity(intent);
 	}

@@ -14,6 +14,7 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -29,7 +30,7 @@ public class PredictFragment extends Fragment implements
 		PredictDialogFragment.PredictDialogFragmentListener {
 
 	private String matchID;
-	private DecimalFormat df = new DecimalFormat("#.00");
+	private DecimalFormat df = new DecimalFormat("#.##");
 	private int gameweek;
 	public static String SELECTION = "com.ytz.punditunited.SELECTION";
 
@@ -42,7 +43,7 @@ public class PredictFragment extends Fragment implements
 	private LinearLayout buttonH;
 	private LinearLayout buttonD;
 	private LinearLayout buttonA;
-	//private int selection;
+	// private int selection;
 	private View view;
 	private boolean tempBoolean;
 	protected int mySelection;
@@ -104,6 +105,18 @@ public class PredictFragment extends Fragment implements
 		iv_home.setImageResource(ClubHelper.getImageResource(home));
 		iv_away.setImageResource(ClubHelper.getImageResource(away));
 
+		// Percent
+		TextView tv_H_percent = (TextView) view.findViewById(R.id.tv_hPercent);
+		TextView tv_D_percent = (TextView) view.findViewById(R.id.tv_dPercent);
+		TextView tv_A_percent = (TextView) view.findViewById(R.id.tv_aPercent);
+		
+		tv_H_percent.setText("" + df.format(getActivity().getIntent()
+				.getExtras().getFloat(FixtureFragment.H_PERCENT)) + "%");
+		tv_D_percent.setText("" + df.format(getActivity().getIntent()
+				.getExtras().getFloat(FixtureFragment.D_PERCENT)) + "%");
+		tv_A_percent.setText("" + df.format(getActivity().getIntent()
+				.getExtras().getFloat(FixtureFragment.A_PERCENT)) + "%");
+
 		// BUTTONS
 		// BET HOME
 		gameweek = getActivity().getIntent().getExtras()
@@ -113,8 +126,6 @@ public class PredictFragment extends Fragment implements
 		buttonH.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// stuff
-				// placeBet(0, matchID, gameweek);
 				openDialog(0);
 			}
 		});
@@ -124,7 +135,6 @@ public class PredictFragment extends Fragment implements
 		buttonD.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// placeBet(1, matchID, gameweek);
 				openDialog(1);
 			}
 		});
@@ -134,21 +144,20 @@ public class PredictFragment extends Fragment implements
 		buttonA.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// placeBet(2, matchID, gameweek);
 				openDialog(2);
 			}
 		});
 
-		//checkStatus();
-		placedBet();
+		//placedBet();
+		checkStatus();
 
 		return view;
 	}
 
 	private void checkStatus() {
-		//if (placedBet() || matchExpire())
+		//if (tempBoolean || matchExpire())
 			//update(mySelection);
-		if (tempBoolean || matchExpire())
+		if (checkSelection() || matchExpire())
 			update(mySelection);
 
 	}
@@ -160,6 +169,9 @@ public class PredictFragment extends Fragment implements
 		return false;
 	}
 
+	/**
+	 * NOT IN USE
+	 */
 	private void placedBet() {
 		// TODO Auto-generated method stub
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
@@ -169,8 +181,9 @@ public class PredictFragment extends Fragment implements
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
 			public void done(ParseObject object, ParseException e) {
 				if (e == null) {
-					int selection = object.getInt("BetType"); // get selection to
-															// highlight
+					int selection = object.getInt("BetType"); // get selection
+																// to
+																// highlight
 					tempBoolean = true;
 					mySelection = selection;
 					checkStatus();
@@ -180,7 +193,18 @@ public class PredictFragment extends Fragment implements
 				}
 			}
 		});
-		//return tempBoolean;
+		// return tempBoolean;
+	}
+
+	private boolean checkSelection() {
+		// SELECTION
+		SharedPreferences preference = getActivity().getSharedPreferences(
+				"Selection", 0);
+		mySelection = preference.getInt(matchID, -1);
+		if (mySelection != -1)
+			return true;
+		else 
+			return false;
 	}
 
 	/**
@@ -209,30 +233,19 @@ public class PredictFragment extends Fragment implements
 				"predictDialog");
 	}
 
-	/*private void placeBet(int type, String id, int gameweek) {
-		System.out.println("IN PLACEBET!");
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		ParseObject myLog = new ParseObject("History");
-		// myLog.put("UserID", currentUser );
-		myLog.put("User", currentUser);
-		// myLog.put("parent", ParseObject.createWithoutData("Control",
-		// "2oFu0OiS0b"));
-		// myLog.put("MatchID", id);
-		myLog.put("Match", ParseObject.createWithoutData("Fixture", id));
-		myLog.put("Bet", type);
-		myLog.put("Check", false);
-		myLog.put("GW", gameweek);
-		myLog.saveInBackground();
-		openDialog(type);
-	}*/
-	
+	/**
+	 * UPdate from Dialog, which redirects to update
+	 */
 	@Override
 	public void updateFromDialog(int selection) {
 		CHANGE = 1;
 		update(selection);
 	}
 
-	
+	/**
+	 * Disable buttons, highlight selection
+	 * @param selection
+	 */
 	public void update(int selection) {
 		buttonH.setEnabled(false);
 		buttonD.setEnabled(false);
@@ -258,7 +271,5 @@ public class PredictFragment extends Fragment implements
 		}
 		myLayout.setBackgroundColor(Color.parseColor("#81ddff"));
 	}
-
-
 
 }

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="matrix"
+            android:src="@drawable/grass" />
+
+        <View
+            android:id="@+id/myRectangleView"
+            android:layout_width="fill_parent"
+            android:layout_height="480dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/rectangle" />
+
+        <ImageView
+            android:id="@+id/iv_fbProfileInfo"
+            android:layout_width="150px"
+            android:layout_height="150px"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_action_user" />
+
+        <TextView
+            android:id="@+id/tv_nameProfileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_fbProfileInfo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="Lee Ting Zhe"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_levelProfileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_nameProfileInfo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text="Level 5?"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:id="@+id/line1_profileInfo"
+            android:layout_width="250dp"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_levelProfileInfo"
+            android:layout_centerHorizontal="true"
+            android:background="#ffffff" />
+
+        <TextView
+            android:id="@+id/textView_fanTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView_winRateTitle"
+            android:layout_below="@+id/textView_winRateTitle"
+            android:layout_marginTop="17dp"
+            android:text="Fan"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:id="@+id/line2_profileInfo"
+            android:layout_width="250dp"
+            android:layout_height="1dp"
+            android:layout_alignLeft="@+id/line1_profileInfo"
+            android:layout_below="@+id/textView_fanTitle"
+            android:layout_marginTop="27dp"
+            android:background="#ffffff" />
+
+        <TextView
+            android:id="@+id/textView_winRateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/line1_profileInfo"
+            android:layout_below="@+id/line1_profileInfo"
+            android:layout_marginLeft="19dp"
+            android:layout_marginTop="19dp"
+            android:text="Win"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_winRateProfileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textView_fanTitle"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@+id/textView_winRateTitle"
+            android:text="50.8%"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_fanProfileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView_fanTitle"
+            android:layout_alignBottom="@+id/textView_fanTitle"
+            android:layout_alignLeft="@+id/tv_winRateProfileInfo"
+            android:text="3?"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_pointsProfileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line2_profileInfo"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@+id/textView_gamesTitle"
+            android:text="211"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tv_gamesProfileInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_pointsProfileInfo"
+            android:layout_below="@+id/line1_profileInfo"
+            android:layout_marginTop="19dp"
+            android:text="11"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/textView_pointsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line2_profileInfo"
+            android:layout_alignLeft="@+id/textView_gamesTitle"
+            android:text="Points"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/textView_gamesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textView_fanTitle"
+            android:layout_toRightOf="@+id/tv_levelProfileInfo"
+            android:text="Games"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+</ScrollView>

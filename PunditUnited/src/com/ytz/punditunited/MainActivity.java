@@ -48,7 +48,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// PARSE SETUP
 		Parse.initialize(this, "gEPGfVTzUnO1j0Z2XdWuFfnrAkJ21DI5cW3X6vJp",
 				"Bjpe0LDwNNUfmOwuiXrbylHeSSOSUAXgRrBudu24");
@@ -74,14 +74,15 @@ public class MainActivity extends FragmentActivity {
 		});
 
 		// Get Selection
-		ParseCloud.callFunctionInBackground("updateScore", null, new FunctionCallback<String>() {
-			  public void done(String result, ParseException e) {
-			    if (e == null) {
-			      getSelection();
-			    }
-			  }
-			});
-
+		ParseCloud.callFunctionInBackground("updateScore", null,
+				new FunctionCallback<String>() {
+					public void done(String result, ParseException e) {
+						if (e == null) {
+							getSelection();
+							getAmtWon();
+						}
+					}
+				});
 
 		// the page adapter contains all the fragment registrations
 		mAdapter = new MyAdapter(getSupportFragmentManager());
@@ -107,21 +108,22 @@ public class MainActivity extends FragmentActivity {
 
 	private void getAmtWon() {
 		final SharedPreferences amtWon = getSharedPreferences("AmtWon", 0);
-			ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
-			query.whereEqualTo("User", ParseUser.getCurrentUser());
-			if (amtWon.getAll().size() != 0) // phone has some data
-				query.whereEqualTo("wonInPhone", false);
-			query.findInBackground(new FindCallback<ParseObject>() {
-				@Override
-				public void done(List<ParseObject> objects, ParseException e) {
-					if (e == null) {
-						storeAmtWon(objects, amtWon);
-					} else {
-						Log.d("score", "getAmtWon: " + e.getMessage());
-					}
-
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("History");
+		query.whereEqualTo("User", ParseUser.getCurrentUser());
+		query.whereEqualTo("Check", true);
+		if (amtWon.getAll().size() != 0) // phone has some data
+			query.whereEqualTo("wonInPhone", false);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					storeAmtWon(objects, amtWon);
+				} else {
+					Log.d("score", "getAmtWon: " + e.getMessage());
 				}
-			});
+
+			}
+		});
 	}
 
 	protected void storeAmtWon(List<ParseObject> objects,
@@ -130,7 +132,9 @@ public class MainActivity extends FragmentActivity {
 		for (int i = 0; i < objects.size(); i++) {
 			amt_editor.putFloat(
 					((ParseObject) objects.get(i).get("Match")).getObjectId(),
-					objects.get(i).getInt("WinAmount"));
+					(float) objects.get(i).getDouble("WinAmount"));
+			objects.get(i).put("wonInPhone", true);
+			objects.get(i).saveInBackground();
 		}
 
 		// Commit the edits!
@@ -171,8 +175,8 @@ public class MainActivity extends FragmentActivity {
 		}
 		// Commit the edits!
 		select_editor.commit();
-		
-		getAmtWon();
+
+		//getAmtWon();
 	}
 
 	/**
@@ -207,9 +211,9 @@ public class MainActivity extends FragmentActivity {
 			case 2:
 				fragment = new RankFragment();
 				break;
-			//case 3:
-				//fragment = new MeFragment();
-				//break;
+			// case 3:
+			// fragment = new MeFragment();
+			// break;
 			default:
 				fragment = null;
 				break;
@@ -226,8 +230,8 @@ public class MainActivity extends FragmentActivity {
 			return "Gameweek " + FixtureFragment.gameweek;
 		case 2:
 			return "PU2";
-		//case 3:
-			//return "PU3";
+			// case 3:
+			// return "PU3";
 		}
 		return null;
 
@@ -267,7 +271,7 @@ public class MainActivity extends FragmentActivity {
 		aBar.addTab(aBar.newTab().setText("Fixture")
 				.setTabListener(tabListener));
 		aBar.addTab(aBar.newTab().setText("Rank").setTabListener(tabListener));
-		//aBar.addTab(aBar.newTab().setText("Me").setTabListener(tabListener));
+		// aBar.addTab(aBar.newTab().setText("Me").setTabListener(tabListener));
 
 	}
 
@@ -301,13 +305,18 @@ public class MainActivity extends FragmentActivity {
 					@Override
 					public void onCompleted(GraphUser user, Response response) {
 						if (user != null) {
-							ParseUser.getCurrentUser()
-									.put("fbId", user.getId());
-							ParseUser.getCurrentUser().put("Name",
-									user.getName());
-							ParseUser.getCurrentUser().put("Points", 100); // initial
-																			// points
-							ParseUser.getCurrentUser().saveInBackground();
+							ParseUser myUser = ParseUser.getCurrentUser();
+							myUser.put("fbId", user.getId());
+							myUser.put("Name", user.getName());
+							myUser.put("Points", 100); // initial points
+							
+							// ZERO
+							myUser.put("Bankrupt", 0);
+							myUser.put("Win", 0);
+							myUser.put("Lost", 0);
+							myUser.put("Games", 0);
+
+							myUser.saveInBackground();
 						}
 					}
 				});

@@ -72,7 +72,6 @@ public class PredictDialogFragment extends DialogFragment {
 		spinner = (Spinner) layout.findViewById(R.id.spinner_dialog);
 		addItemOnSpinner();
 
-
 		totalPoints = ParseUser.getCurrentUser().getInt("Points");
 		seekText = (TextView) layout.findViewById(R.id.textView_seekText);
 		seekText.setText(""
@@ -86,7 +85,8 @@ public class PredictDialogFragment extends DialogFragment {
 		if (totalPoints <= 0) {
 			seekbar.setEnabled(false);
 			seekText.setText("0");
-			builder.create().getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+			builder.create().getButton(Dialog.BUTTON_POSITIVE)
+					.setEnabled(false);
 		}
 
 		else {
@@ -142,7 +142,7 @@ public class PredictDialogFragment extends DialogFragment {
 	 *            (matchID)
 	 * @param gameweek
 	 */
-	private void placeBet(int type, String id, int gameweek) {
+	private void placeBet(final int type, String id, int gameweek) {
 		System.out.println("IN PLACEBET!");
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		myLog = new ParseObject("History");
@@ -154,7 +154,7 @@ public class PredictDialogFragment extends DialogFragment {
 		myLog.put("BetAmount", Integer.parseInt(seekText.getText().toString()));
 		myLog.put("Comment", comment.getText().toString());
 		myLog.put("selectionInPhone", true); // selection is saved in phone
-		myLog.put("wonInPhone", true); // AmtWon is saved in phone
+		myLog.put("wonInPhone", false); // AmtWon is saved in phone
 		myLog.saveInBackground(new SaveCallback() {
 			@Override
 			public void done(ParseException e) {
@@ -162,6 +162,18 @@ public class PredictDialogFragment extends DialogFragment {
 						matchID);
 				ParseRelation<ParseObject> relation = match.getRelation("Bets");
 				relation.add(myLog);
+				match.increment("Predict_Total");
+				switch (type) {
+				case 0:
+					match.increment("Predict_H");
+					break;
+				case 1:
+					match.increment("Predict_D");
+					break;
+				case 2:
+					match.increment("Predict_A");
+					break;
+				}
 				match.saveInBackground();
 			}
 		});

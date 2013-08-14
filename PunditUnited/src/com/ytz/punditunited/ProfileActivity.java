@@ -101,7 +101,7 @@ public class ProfileActivity extends FragmentActivity {
 			Fragment fragment;
 			switch (position) {
 			case 0:
-				fragment = new SocialFragment();
+				fragment = new ProfileInfoFragment();
 				break;
 			case 1:
 				fragment = new SocialFragment();

@@ -126,7 +126,7 @@
                 android:text="H" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_hPercent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -155,7 +155,7 @@
                 android:text="D" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/tv_dPercent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -184,7 +184,7 @@
                 android:text="A" />
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/tv_aPercent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
