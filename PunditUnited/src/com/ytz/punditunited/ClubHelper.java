@@ -2,6 +2,11 @@ package com.ytz.punditunited;
 
 public class ClubHelper {
 
+	/**
+	 * Given full name, return short name
+	 * @param team
+	 * @return
+	 */
 	public static String getShortName(String team){
 		if (team.equals("Newcastle"))
 			return "NEW";
@@ -46,6 +51,11 @@ public class ClubHelper {
 		return "";
 	}
 	
+	/**
+	 * Returns R.id of Club's logo image
+	 * @param team
+	 * @return
+	 */
 	public static int getImageResource(String team){
 		if (team.equals("Newcastle"))
 			return R.drawable.icon_newcastle;

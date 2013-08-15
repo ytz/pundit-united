@@ -2,26 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin" >
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/textView_rankNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/UI_element_margin"
         android:text="1)" />
 
     <ImageView
         android:id="@+id/imageView_profilePic"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/UI_element_margin"
+        android:layout_marginLeft="@dimen/UI_element_margin"
+        android:layout_marginRight="@dimen/UI_element_margin"
+        android:layout_marginTop="@dimen/UI_element_margin" />
 
     <TextView
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/UI_element_margin"
+        android:layout_marginRight="@dimen/UI_element_margin"
         android:text="Yan Ting Zhe" />
 
     <LinearLayout
@@ -33,8 +39,8 @@
             android:id="@+id/textView_rankBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="1250" />
-
     </LinearLayout>
 
 </LinearLayout>

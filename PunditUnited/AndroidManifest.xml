@@ -5,23 +5,25 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:logo="@drawable/logo_white"
+        android:theme="@style/Theme.Red_united" >
         <activity
             android:name="com.ytz.punditunited.MainActivity"
-            android:label="@string/app_name">
-            <!--  android:uiOptions="splitActionBarWhenNarrow" > -->
+            android:label="@string/app_name" >
+
+            <!-- android:uiOptions="splitActionBarWhenNarrow" > -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

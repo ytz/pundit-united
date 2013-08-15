@@ -75,7 +75,8 @@ public class PredictDialogFragment extends DialogFragment {
 		totalPoints = ParseUser.getCurrentUser().getInt("Points");
 		seekText = (TextView) layout.findViewById(R.id.textView_seekText);
 		seekText.setText(""
-				+ ((int) ((0 / 100.0) * (totalPoints - 5)) / 5 * 5 + 5));
+				+ ((int) ((0 / 100.0) * (totalPoints - 5)) / 5 * 5 + 5) + "/"
+				+ totalPoints);
 
 		comment = (EditText) layout.findViewById(R.id.editText_dialogComment);
 
@@ -84,7 +85,7 @@ public class PredictDialogFragment extends DialogFragment {
 		// if no points, disable button
 		if (totalPoints <= 0) {
 			seekbar.setEnabled(false);
-			seekText.setText("0");
+			seekText.setText("0/0");
 			builder.create().getButton(Dialog.BUTTON_POSITIVE)
 					.setEnabled(false);
 		}

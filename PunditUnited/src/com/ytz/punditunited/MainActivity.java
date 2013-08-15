@@ -222,14 +222,19 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
+	/**
+	 * Action Bar's Title
+	 * @param position
+	 * @return
+	 */
 	private String getTitle(int position) {
 		switch (position) {
 		case 0:
-			return "PU";
+			return "Pundit United";
 		case 1:
 			return "Gameweek " + FixtureFragment.gameweek;
 		case 2:
-			return "PU2";
+			return "Global Ranking";
 			// case 3:
 			// return "PU3";
 		}
