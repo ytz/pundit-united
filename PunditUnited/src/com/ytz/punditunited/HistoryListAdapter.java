@@ -20,6 +20,7 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 	private Context context;
 	private List<ParseObject> ParseObjectList;
 	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
+
 	// place
 
 	public HistoryListAdapter(Context context, List<ParseObject> ParseObjectList) {
@@ -81,33 +82,60 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 		String away = ParseObjectList.get(position).getParseObject("Match")
 				.getString("Away");
 
+		// GW
 		holder.tv_gameweek.setText("GW "
 				+ ParseObjectList.get(position).getNumber("GW"));
+
+		// Club short name
 		holder.tv_homeTeam.setText("" + ClubHelper.getShortName(home));
 		holder.tv_awayTeam.setText("" + ClubHelper.getShortName(away));
+		
+		// BetType
+		int selection = ParseObjectList.get(position).getInt("BetType");
+		String betType = null;
+		switch (selection) {
+		case 0:
+			betType = "H";
+			break;
+		case 1:
+			betType = "D";
+			break;
+		case 2:
+			betType = "A";
+			break;
+		}
 
 		// Score
+		// If there is a score
 		if (ParseObjectList.get(position).getParseObject("Match")
 				.getNumber("H_Goal") != null) {
 			int homeGoal = ParseObjectList.get(position)
 					.getParseObject("Match").getNumber("H_Goal").intValue();
 			int awayGoal = ParseObjectList.get(position)
 					.getParseObject("Match").getNumber("A_Goal").intValue();
-			holder.tv_score.setText(homeGoal + " : " + awayGoal);
+			
+			holder.tv_score.setText(homeGoal + " : " + awayGoal + "   " + betType);
+
+			// Points
+			final SharedPreferences amtWon = context.getSharedPreferences(
+					"AmtWon", 0);
+			float amount = amtWon.getFloat(ParseObjectList.get(position)
+					.getParseObject("Match").getObjectId(), -1);
+			if (amount != -1) {
+				String sign = "";
+				if (amount > 0)
+					sign = "+";
+				holder.tv_points.setText(sign + df.format(amount));
+			}
 		}
 
-		// Points
-		final SharedPreferences amtWon = context.getSharedPreferences("AmtWon",
-				0);
-		float amount = amtWon.getFloat(ParseObjectList.get(position).getParseObject("Match").getObjectId(),
-				-1);
-		if (amount != -1) {
-			String sign = "";
-			if (amount > 0)
-				sign = "+";
-			holder.tv_points.setText(sign + df.format(amount));
+		// If there is no score
+		else{
+			holder.tv_score.setText(betType); // show selection
+			holder.tv_points.setText("" + ParseObjectList.get(position).getInt("BetAmount")); // show amt bet
 		}
 
+		// Club Logo
 		holder.iv_home.setImageResource(ClubHelper.getImageResource(home));
 		holder.iv_away.setImageResource(ClubHelper.getImageResource(away));
 
