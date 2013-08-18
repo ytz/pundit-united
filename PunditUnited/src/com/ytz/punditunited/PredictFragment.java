@@ -188,7 +188,7 @@ public class PredictFragment extends Fragment implements
 					int selection = object.getInt("BetType"); // get selection
 																// to
 																// highlight
-					// System.out.println("selection " + selection);
+					System.out.println("selection " + selection);
 					tempBoolean = true;
 					mySelection = selection;
 					checkStatus();
@@ -261,6 +261,7 @@ public class PredictFragment extends Fragment implements
 	private void highlightLayout(int selection) {
 		LinearLayout myLayout = null;
 		switch (selection) {
+		case -1: return;
 		case 0:
 			myLayout = (LinearLayout) view
 					.findViewById(R.id.layout_HomePredict);
