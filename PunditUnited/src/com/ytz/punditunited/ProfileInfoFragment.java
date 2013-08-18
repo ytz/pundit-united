@@ -18,7 +18,7 @@ public class ProfileInfoFragment extends Fragment {
 
 	private static final String PICTURE = "/picture?width=100&height=100";
 	private static final String BASE_URL = "http://graph.facebook.com/";
-	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
+	DecimalFormat df = new DecimalFormat("0.00"); // display odds in 2decimal
 
 	// place
 
@@ -65,7 +65,7 @@ public class ProfileInfoFragment extends Fragment {
 			wr.setText("0%");
 		} else {
 			int win = user.getInt("Win");
-			float winRate = (win / game) * 100;
+			float winRate = (win / (float) game) * 100;
 			wr.setText("" + df.format(winRate) + "%");
 		}
 

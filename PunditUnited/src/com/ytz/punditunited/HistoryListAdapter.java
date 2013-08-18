@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 
 	private Context context;
 	private List<ParseObject> ParseObjectList;
-	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
+	DecimalFormat df = new DecimalFormat("0.00"); // display odds in 2decimal
 
 	// place
 
@@ -47,6 +48,7 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 		TextView tv_points;
 		ImageView iv_home;
 		ImageView iv_away;
+		TextView tv_selection;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -73,6 +75,9 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 			holder.iv_away = (ImageView) convertView
 					.findViewById(R.id.imageView_historyAway);
 
+			holder.tv_selection = (TextView) convertView
+					.findViewById(R.id.textView_historySelection);
+
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
@@ -89,7 +94,7 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 		// Club short name
 		holder.tv_homeTeam.setText("" + ClubHelper.getShortName(home));
 		holder.tv_awayTeam.setText("" + ClubHelper.getShortName(away));
-		
+
 		// BetType
 		int selection = ParseObjectList.get(position).getInt("BetType");
 		String betType = null;
@@ -105,6 +110,9 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 			break;
 		}
 
+		// Selection
+		holder.tv_selection.setText(betType);
+
 		// Score
 		// If there is a score
 		if (ParseObjectList.get(position).getParseObject("Match")
@@ -113,26 +121,35 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 					.getParseObject("Match").getNumber("H_Goal").intValue();
 			int awayGoal = ParseObjectList.get(position)
 					.getParseObject("Match").getNumber("A_Goal").intValue();
-			
-			holder.tv_score.setText(homeGoal + " : " + awayGoal + "   " + betType);
 
-			// Points
-			final SharedPreferences amtWon = context.getSharedPreferences(
-					"AmtWon", 0);
-			float amount = amtWon.getFloat(ParseObjectList.get(position)
-					.getParseObject("Match").getObjectId(), -1);
-			if (amount != -1) {
-				String sign = "";
-				if (amount > 0)
-					sign = "+";
-				holder.tv_points.setText(sign + df.format(amount));
+			holder.tv_score.setText(homeGoal + " : " + awayGoal);
+
+			double amount = ParseObjectList.get(position)
+					.getDouble("WinAmount");
+
+			String sign = "";
+			if (amount > 0) {
+				sign = "+";
+				holder.tv_points.setTextColor(Color.parseColor("#99CC00"));
+			} else if (amount < 0) {
+				holder.tv_points.setTextColor(Color.parseColor("#FF4444"));
+			}
+			holder.tv_points.setText(sign + df.format(amount));
+
+			if (amount == 0) {
+				holder.tv_points.setText(""
+						+ ParseObjectList.get(position).getInt("BetAmount")); // show
+																				// amt
+																				// bet
 			}
 		}
 
 		// If there is no score
-		else{
-			holder.tv_score.setText(betType); // show selection
-			holder.tv_points.setText("" + ParseObjectList.get(position).getInt("BetAmount")); // show amt bet
+		else {
+			holder.tv_points.setText(""
+					+ ParseObjectList.get(position).getInt("BetAmount")); // show
+																			// amt
+																			// bet
 		}
 
 		// Club Logo

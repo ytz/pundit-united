@@ -75,15 +75,14 @@ public class PredictDialogFragment extends DialogFragment {
 		totalPoints = ParseUser.getCurrentUser().getInt("Points");
 		seekText = (TextView) layout.findViewById(R.id.textView_seekText);
 		seekText.setText(""
-				+ ((int) ((0 / 100.0) * (totalPoints - 5)) / 5 * 5 + 5) + "/"
-				+ totalPoints);
+				+ ((int) ((0 / 100.0) * (totalPoints - 5)) / 5 * 5 + 5));
 
 		comment = (EditText) layout.findViewById(R.id.editText_dialogComment);
 
 		SeekBar seekbar = (SeekBar) layout.findViewById(R.id.seekBar_dialog);
 
 		// if no points, disable button
-		if (totalPoints <= 0) {
+		if (totalPoints < 5) {
 			seekbar.setEnabled(false);
 			seekText.setText("0/0");
 			builder.create().getButton(Dialog.BUTTON_POSITIVE)
@@ -191,8 +190,14 @@ public class PredictDialogFragment extends DialogFragment {
 		editor.putInt(id, type);
 		// Commit the edits!
 		editor.commit();
-
-		// openDialog(type);
+		
+		// Post
+		ParseObject myPost = new ParseObject("Post");
+		myPost.put("User", currentUser);
+		myPost.put("PostType", "BetPlaced");
+		myPost.put("History", myLog);
+		myPost.put("Status", comment.getText().toString());
+		myPost.saveInBackground();
 	}
 
 	/**

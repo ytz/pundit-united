@@ -23,14 +23,13 @@
             android:id="@+id/textView_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
             android:text="7" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/UI_element_margin"
-        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="vertical" >
@@ -39,20 +38,23 @@
             android:id="@+id/imageView_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
             android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/textView_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LIV" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:fontFamily="sans-serif-condensed"
+            android:text="LIV"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/UI_element_margin"
-        android:layout_marginTop="@dimen/UI_element_margin"
         android:layout_weight="0.1"
         android:gravity="center"
         android:orientation="vertical" >
@@ -61,20 +63,25 @@
             android:id="@+id/imageView_away"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
             android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/textView_away"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="STO" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:fontFamily="sans-serif-condensed"
+            android:text="STO"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_HomeFixture"
-        android:layout_width="wrap_content"
+        android:layout_width="38dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -82,25 +89,34 @@
             android:id="@+id/textView_H"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="H" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
+            android:text="H"
+            android:textAllCaps="true"
+            android:textColor="#6000" />
 
         <TextView
             android:id="@+id/textView_homeOdds"
-            android:layout_width="36dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1.60" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
+            android:fontFamily="sans-serif-condensed"
+            android:text="1.60"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <View
+        android:id="@+id/line1"
         android:layout_width="1dp"
         android:layout_height="fill_parent"
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:id="@+id/layout_DrawFixture"
-        android:layout_width="wrap_content"
+        android:layout_width="38dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -108,26 +124,34 @@
             android:id="@+id/textView_D"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="D" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
+            android:text="D"
+            android:textAllCaps="true"
+            android:textColor="#6000" />
 
         <TextView
             android:id="@+id/textView_drawOdds"
-            android:layout_width="36dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2.80" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
+            android:fontFamily="sans-serif-condensed"
+            android:text="2.80"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
     <View
+        android:id="@+id/line2"
         android:layout_width="1dp"
         android:layout_height="fill_parent"
         android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:id="@+id/layout_AwayFixture"
-        android:layout_width="wrap_content"
+        android:layout_width="38dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/UI_element_margin"
-        android:layout_weight="0.1"
+        android:layout_weight="0.2"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -135,13 +159,21 @@
             android:id="@+id/textView_A"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
+            android:text="A"
+            android:textAllCaps="true"
+            android:textColor="#6000" />
 
         <TextView
             android:id="@+id/textView_awayOdds"
-            android:layout_width="36dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:layout_marginBottom="@dimen/UI_element_margin"
+            android:layout_marginTop="@dimen/UI_element_margin"
+            android:fontFamily="sans-serif-condensed"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 
 </LinearLayout>

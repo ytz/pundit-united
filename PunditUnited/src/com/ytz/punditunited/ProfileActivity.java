@@ -1,5 +1,12 @@
 package com.ytz.punditunited;
 
+import java.util.HashMap;
+
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -25,7 +32,7 @@ public class ProfileActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// Up Action
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -49,6 +56,23 @@ public class ProfileActivity extends FragmentActivity {
 		});
 
 		setupABar();
+
+		/*
+		// NEW CLOUD
+		System.out.println("CLOUD");
+		String userID = getIntent().getExtras()
+				.getString(MainActivity.MYUSERID);
+
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("user", userID);
+		ParseCloud.callFunctionInBackground("updateScore", params,
+				new FunctionCallback<String>() {
+					public void done(String result, ParseException e) {
+						if (e == null) {
+
+						}
+					}
+				});*/
 	}
 
 	// http://developer.android.com/training/implementing-navigation/lateral.html#swipe-tabs
@@ -116,15 +140,15 @@ public class ProfileActivity extends FragmentActivity {
 			return fragment;
 		}
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    // Respond to the action bar's Up/Home button
-	    case android.R.id.home:
-	        NavUtils.navigateUpFromSameTask(this);
-	        return true;
-	    }
-	    return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

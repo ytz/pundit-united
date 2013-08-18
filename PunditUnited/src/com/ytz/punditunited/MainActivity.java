@@ -1,5 +1,6 @@
 package com.ytz.punditunited;
 
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,7 +8,10 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.AlarmManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
@@ -73,7 +77,11 @@ public class MainActivity extends FragmentActivity {
 			}
 		});
 
+		// Alarm Cloud
+		setAlarm();
+		
 		// Get Selection
+		System.out.println("CLOUD");
 		ParseCloud.callFunctionInBackground("updateScore", null,
 				new FunctionCallback<String>() {
 					public void done(String result, ParseException e) {
@@ -104,6 +112,17 @@ public class MainActivity extends FragmentActivity {
 		});
 
 		setupABar();
+	}
+
+	private void setAlarm() {
+		 Intent intentAlarm = new Intent(this, AlarmReciever.class);
+	       
+         // create the object
+         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+         //set the alarm for particular time
+         alarmManager.setInexactRepeating (AlarmManager.RTC_WAKEUP,new GregorianCalendar().getTimeInMillis(), AlarmManager.INTERVAL_DAY,PendingIntent.getBroadcast(this,1,  intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT) );
+		
 	}
 
 	private void getAmtWon() {
@@ -320,6 +339,8 @@ public class MainActivity extends FragmentActivity {
 							myUser.put("Win", 0);
 							myUser.put("Lost", 0);
 							myUser.put("Games", 0);
+							
+							myUser.setPassword("123");
 
 							myUser.saveInBackground();
 						}

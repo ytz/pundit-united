@@ -109,13 +109,16 @@ public class PredictFragment extends Fragment implements
 		TextView tv_H_percent = (TextView) view.findViewById(R.id.tv_hPercent);
 		TextView tv_D_percent = (TextView) view.findViewById(R.id.tv_dPercent);
 		TextView tv_A_percent = (TextView) view.findViewById(R.id.tv_aPercent);
-		
-		tv_H_percent.setText("" + df.format(getActivity().getIntent()
-				.getExtras().getFloat(FixtureFragment.H_PERCENT)) + "%");
-		tv_D_percent.setText("" + df.format(getActivity().getIntent()
-				.getExtras().getFloat(FixtureFragment.D_PERCENT)) + "%");
-		tv_A_percent.setText("" + df.format(getActivity().getIntent()
-				.getExtras().getFloat(FixtureFragment.A_PERCENT)) + "%");
+
+		tv_H_percent.setText(""
+				+ df.format(getActivity().getIntent().getExtras()
+						.getFloat(FixtureFragment.H_PERCENT)) + "%");
+		tv_D_percent.setText(""
+				+ df.format(getActivity().getIntent().getExtras()
+						.getFloat(FixtureFragment.D_PERCENT)) + "%");
+		tv_A_percent.setText(""
+				+ df.format(getActivity().getIntent().getExtras()
+						.getFloat(FixtureFragment.A_PERCENT)) + "%");
 
 		// BUTTONS
 		// BET HOME
@@ -148,15 +151,15 @@ public class PredictFragment extends Fragment implements
 			}
 		});
 
-		//placedBet();
+		// placedBet();
 		checkStatus();
 
 		return view;
 	}
 
 	private void checkStatus() {
-		//if (tempBoolean || matchExpire())
-			//update(mySelection);
+		// if (tempBoolean || matchExpire())
+		// update(mySelection);
 		if (checkSelection() || matchExpire())
 			update(mySelection);
 
@@ -178,12 +181,14 @@ public class PredictFragment extends Fragment implements
 		query.whereEqualTo("Match",
 				ParseObject.createWithoutData("Fixture", matchID));
 		query.whereEqualTo("User", ParseUser.getCurrentUser());
+		query.whereEqualTo("Check", true);
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
 			public void done(ParseObject object, ParseException e) {
 				if (e == null) {
 					int selection = object.getInt("BetType"); // get selection
 																// to
 																// highlight
+					// System.out.println("selection " + selection);
 					tempBoolean = true;
 					mySelection = selection;
 					checkStatus();
@@ -193,7 +198,6 @@ public class PredictFragment extends Fragment implements
 				}
 			}
 		});
-		// return tempBoolean;
 	}
 
 	private boolean checkSelection() {
@@ -203,7 +207,7 @@ public class PredictFragment extends Fragment implements
 		mySelection = preference.getInt(matchID, -1);
 		if (mySelection != -1)
 			return true;
-		else 
+		else
 			return false;
 	}
 
@@ -244,6 +248,7 @@ public class PredictFragment extends Fragment implements
 
 	/**
 	 * Disable buttons, highlight selection
+	 * 
 	 * @param selection
 	 */
 	public void update(int selection) {

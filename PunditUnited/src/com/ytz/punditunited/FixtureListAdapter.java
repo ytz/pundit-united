@@ -64,6 +64,8 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		TextView tv_H;
 		TextView tv_D;
 		TextView tv_A;
+		View line1;
+		View line2;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -103,6 +105,9 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 			holder.tv_H = (TextView) convertView.findViewById(R.id.textView_H);
 			holder.tv_D = (TextView) convertView.findViewById(R.id.textView_D);
 			holder.tv_A = (TextView) convertView.findViewById(R.id.textView_A);
+
+			holder.line1 = (View) convertView.findViewById(R.id.line1);
+			holder.line2 = (View) convertView.findViewById(R.id.line2);
 
 			convertView.setTag(holder);
 		} else
@@ -189,9 +194,12 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 		// FORMAT WHEN THERE IS SCORE
 		else {
 			// CLEAR H,D,A
-			holder.lo_home.removeView(holder.tv_H);
-			holder.lo_draw.removeView(holder.tv_D);
-			holder.lo_away.removeView(holder.tv_A);
+			// holder.lo_home.removeView(holder.tv_H);
+			// holder.lo_draw.removeView(holder.tv_D);
+			// holder.lo_away.removeView(holder.tv_A);
+
+			// Try label
+			holder.tv_H.setText("Score");
 
 			// SCORE
 			int hGoal = ParseObjectList.get(position).getNumber("H_Goal")
@@ -214,17 +222,35 @@ public class FixtureListAdapter extends ArrayAdapter<ParseObject> {
 				holder.tv_drawOdds.setText("A");
 				break;
 			}
-			
-			// Show Amount Won/lost, if there is
-			final SharedPreferences amtWon = context.getSharedPreferences("AmtWon", 0);
-			Float amount = amtWon.getFloat(ParseObjectList.get(position).getObjectId(), -1);
-			if (amount != -1){
-				String sign = "";
-				if (amount > 0)
-					sign = "+";
-				holder.tv_awayOdds.setText(sign + df.format(amount));
-			}
 
+			// Show Amount Won/lost, if there is
+			final SharedPreferences amtWon = context.getSharedPreferences(
+					"AmtWon", 0);
+			Float amount = amtWon.getFloat(ParseObjectList.get(position)
+					.getObjectId(), -1);
+			if (amount != -1) {
+				String sign = "";
+				if (amount > 0) {
+					sign = "+";
+					holder.tv_awayOdds
+							.setTextColor(Color.parseColor("#99CC00"));
+				} else {
+					holder.tv_awayOdds
+							.setTextColor(Color.parseColor("#FF4444"));
+				}
+				holder.tv_awayOdds.setText(sign + df.format(amount));
+				holder.tv_A.setText("Points");
+				holder.tv_D.setText("Bet");
+			}
+			// no bet
+			else {
+				holder.tv_A.setText("");
+				holder.tv_D.setText("");
+				holder.tv_drawOdds.setText("");
+				holder.line1.setVisibility(View.INVISIBLE);
+				holder.line2.setVisibility(View.INVISIBLE);
+
+			}
 
 		}
 

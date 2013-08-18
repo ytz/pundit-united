@@ -27,7 +27,7 @@ public class RankListAdapter extends ArrayAdapter<ParseUser> {
 	private Context context;
 	private List<ParseUser> ParseUserList;
 	private FacebookImageLoader mImageLoader;
-	DecimalFormat df = new DecimalFormat("#.00"); // display odds in 2decimal
+	DecimalFormat df = new DecimalFormat("0.00"); // display odds in 2decimal
 													// place
 	private static final String BASE_URL = "http://graph.facebook.com/";
 	// http://stackoverflow.com/questions/11743768/how-to-get-facebook-profile-large-square-picture
