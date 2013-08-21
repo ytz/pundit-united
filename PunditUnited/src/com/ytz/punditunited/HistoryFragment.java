@@ -55,6 +55,7 @@ public class HistoryFragment extends ListFragment {
 		query.whereEqualTo("User", currentUser);
 		query.include("Match");
 		query.include("User");
+		query.addDescendingOrder("createdAt");
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
