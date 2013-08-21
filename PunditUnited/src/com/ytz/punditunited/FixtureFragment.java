@@ -172,46 +172,6 @@ public class FixtureFragment extends ListFragment {
 		});
 	}
 
-	/*protected void getSelection(int temp) {
-		final int count = temp;
-		if (count == list.size() && PredictFragment.CHANGE == 0) {
-			System.out.println("Go to setupadapter");
-			setUpAdapter();
-		} else if (count >= list.size() && PredictFragment.CHANGE == 1) {
-			PredictFragment.CHANGE = 0;
-			adapter.notifyDataSetChanged();
-			listView.setSelectionFromTop(index, top);
-			return;
-		} else {
-			if (count >= list.size())
-				return;
-
-			// PARSE QUERY SELECTION
-			ParseRelation<ParseObject> relation = list.get(count).getRelation(
-					"Bets");
-			ParseQuery<ParseObject> query = relation.getQuery();
-			query.whereEqualTo("User", ParseUser.getCurrentUser());
-			query.findInBackground(new FindCallback<ParseObject>() {
-
-				@Override
-				public void done(List<ParseObject> objects, ParseException e) {
-					if (e == null && objects.size() != 0) {
-						list.get(count).put("Selection",
-								objects.get(0).getInt("BetType"));
-						getSelection(count + 1);
-					} else {
-						list.get(count).put("Selection", -1);
-						getSelection(count + 1);
-					}
-
-				}
-
-			});
-
-		} // else
-
-	}*/
-
 	private void setUpAdapter() {
 		ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
 		adapter = new SeparatedListAdapter(getActivity());
