@@ -1,5 +1,6 @@
 package com.ytz.punditunited;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class PredictDialogFragment extends DialogFragment {
 	private int totalPoints;
 	private PredictFragment mListener;
 	private ParseObject myLog;
+	DecimalFormat df = new DecimalFormat("0.00");
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -198,19 +200,34 @@ public class PredictDialogFragment extends DialogFragment {
 		myPost.put("History", myLog);
 		myPost.put("Status", comment.getText().toString());
 		String myChoice = null;
+		String myEmote = "";
+		String myOdds = "";
 		switch (type) {
 		case 0:
 			myChoice = home;
+			myEmote = "[" + home + "]";
+			myOdds = homeOdds;
 			break;
 		case 1:
 			myChoice = "DRAW";
+			myOdds = drawOdds;
 			break;
 		case 2:
 			myChoice = away;
+			myEmote = "[" + away + "]";
+			myOdds = awayOdds;
 			break;
 		}
-		myPost.put("SpecialStatus", "Placed " + seekText.getText() + " "
-				+ myChoice + " for " + home + " vs " + away);
+		/*
+		 * myPost.put("SpecialStatus", "Placed <b>" + seekText.getText()
+				+ "</b> " + myEmote + " <b>" + myChoice + "</b> for ["
+				+ home + "] <b>" + home + "</b> vs [" + away + "] <b>" + away
+				+ "</b>.");
+		 */
+		myPost.put("SpecialStatus", "[" + home + "] <b>" + home + "</b> vs ["
+				+ away + "] <b>" + away + "</b>    GW " + gameweek + "<br><b>"
+				+ seekText.getText() + "</b> points on " + myEmote + " <b>"
+				+ myChoice + "</b> (" + df.format(myOdds) + ")");
 		myPost.saveInBackground();
 	}
 

@@ -1,6 +1,84 @@
 package com.ytz.punditunited;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import android.content.Context;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spannable.Factory;
+import android.text.style.ImageSpan;
+
 public class ClubHelper {
+	
+	private static final Factory spannableFactory = Spannable.Factory
+	        .getInstance();
+
+	private static final Map<Pattern, Integer> club_emote = new HashMap<Pattern, Integer>();
+
+	static {
+	    addPattern(club_emote, "[Newcastle]", R.drawable.emote_newcastle);
+	    addPattern(club_emote, "[Liverpool]", R.drawable.emote_liverpool);
+	    addPattern(club_emote, "[Stoke]", R.drawable.emote_stoke);
+	    addPattern(club_emote, "[Arsenal]", R.drawable.emote_arsenal);
+	    addPattern(club_emote, "[Aston Villa]", R.drawable.emote_villa);
+	    addPattern(club_emote, "[Norwich]", R.drawable.emote_norwich);
+	    addPattern(club_emote, "[Everton]", R.drawable.emote_everton);
+	    addPattern(club_emote, "[Sunderland]", R.drawable.emote_sunderland);
+	    addPattern(club_emote, "[Fulham]", R.drawable.emote_fulham);
+	    addPattern(club_emote, "[West Brom]", R.drawable.emote_brom);
+	    addPattern(club_emote, "[Southampton]", R.drawable.emote_south);
+	    addPattern(club_emote, "[West Ham]", R.drawable.emote_ham);
+	    addPattern(club_emote, "[Cardiff]", R.drawable.emote_cardiff);
+	    addPattern(club_emote, "[Swansea]", R.drawable.emote_swansea);
+	    addPattern(club_emote, "[Man United]", R.drawable.emote_united);
+	    addPattern(club_emote, "[Crystal Palace]", R.drawable.emote_crystal);
+	    addPattern(club_emote, "[Tottenham]", R.drawable.emote_spurs);
+	    addPattern(club_emote, "[Chelsea]", R.drawable.emote_chelsea);
+	    addPattern(club_emote, "[Hull]", R.drawable.emote_hull);
+	    addPattern(club_emote, "[Man City]", R.drawable.emote_city);
+	}
+
+	private static void addPattern(Map<Pattern, Integer> map, String smile,
+	        int resource) {
+	    map.put(Pattern.compile(Pattern.quote(smile)), resource);
+	}
+	
+	public static boolean addClubEmote(Context context, Spannable spannable) {
+	    boolean hasChanges = false;
+	    for (Entry<Pattern, Integer> entry : club_emote.entrySet()) {
+	        Matcher matcher = entry.getKey().matcher(spannable);
+	        while (matcher.find()) {
+	            boolean set = true;
+	            for (ImageSpan span : spannable.getSpans(matcher.start(),
+	                    matcher.end(), ImageSpan.class))
+	                if (spannable.getSpanStart(span) >= matcher.start()
+	                        && spannable.getSpanEnd(span) <= matcher.end())
+	                    spannable.removeSpan(span);
+	                else {
+	                    set = false;
+	                    break;
+	                }
+	            if (set) {
+	                hasChanges = true;
+	                spannable.setSpan(new ImageSpan(context, entry.getValue()),
+	                        matcher.start(), matcher.end(),
+	                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	            }
+	        }
+	    }
+	    return hasChanges;
+	}
+
+	public static Spannable getClubEmoteText(Context context, CharSequence text) {
+		text = Html.fromHtml(text.toString());
+	    Spannable spannable = spannableFactory.newSpannable(text);
+	    addClubEmote(context, spannable);
+	    return spannable;
+	}
 
 	/**
 	 * Given full name, return short name

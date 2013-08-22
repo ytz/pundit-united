@@ -1,16 +1,17 @@
 package com.ytz.punditunited;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.Html;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 		TextView tv_name;
 		TextView tv_special;
 		TextView tv_comment;
+		TextView tv_title;
+		TextView tv_time;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -63,30 +66,57 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 					.findViewById(R.id.textView_statusSpecial);
 			holder.tv_comment = (TextView) convertView
 					.findViewById(R.id.textView_statusComment);
+			holder.tv_title = (TextView) convertView
+					.findViewById(R.id.textView_statusTitle);
+			holder.tv_time = (TextView) convertView
+					.findViewById(R.id.textView_statusTime);
 
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
+		// Name
 		ParseUser user = (ParseUser) ParseObjectList.get(position).get("User");
-
 		holder.tv_name.setText(user.getString("Name"));
 
+		// Profile Pic
 		String id = user.getString("fbId");
 		String url = BASE_URL + id + PICTURE;
-		// ImageSize targetSize = new ImageSize(50, 50);
-		ImageLoader.getInstance().displayImage(url, holder.iv_profilePic); 
+		ImageLoader.getInstance().displayImage(url, holder.iv_profilePic);
 
 		// Special Status
 		if (!ParseObjectList.get(position).getString("SpecialStatus").isEmpty()) {
-			//holder.tv_special.setText(ParseObjectList.get(position).getString("SpecialStatus"));
-			holder.tv_special.setText(Html.fromHtml(ParseObjectList.get(position).getString("SpecialStatus")));
-			
+			Spannable s = ClubHelper.getClubEmoteText(getContext(),
+					ParseObjectList.get(position).getString("SpecialStatus"));
+			holder.tv_special.setText(s);
 		}
-		
+
 		// Status
 		if (!ParseObjectList.get(position).getString("Status").isEmpty()) {
-			holder.tv_comment.setText(ParseObjectList.get(position).getString("Status"));
+			holder.tv_comment.setText(ParseObjectList.get(position).getString(
+					"Status"));
 		}
+
+		// Title
+		if (user.getString("Title") != null) {
+			holder.tv_title.setText(user.getString("Title"));
+		}
+
+		// Time
+		Date postDate = ParseObjectList.get(position).getCreatedAt();
+		long diff = Calendar.getInstance().getTime().getTime()
+				- postDate.getTime();
+		String time = "";
+
+		if (diff / (60 * 60 * 1000) >= 24) {
+			SimpleDateFormat sf = new SimpleDateFormat("d MMM");
+			time = sf.format(postDate);
+		} else if (diff / (60 * 60 * 1000) > 0)
+			time = "" + (diff / (60 * 60 * 1000)) + "h";
+		else if (diff / (60 * 1000) > 0)
+			time = "" + (diff / (60 * 1000)) + "m";
+		else
+			time = "" + (diff / 1000) + "s";
+		holder.tv_time.setText("" + time);
 
 		return convertView;
 

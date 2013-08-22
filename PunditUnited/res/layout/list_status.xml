@@ -38,12 +38,12 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/textView_statusTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/UI_element_margin"
                     android:fontFamily="sans-serif-condensed"
-                    android:text="Creator"
+                    android:text=""
                     android:textAllCaps="true"
                     android:textColor="#669900"
                     android:textStyle="bold" />
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/UI_element_margin"
-                android:text="Admin"
+                android:text="Placeholder"
                 android:textColor="#6000"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -62,11 +62,12 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:layout_weight="0.08"
+            android:gravity="center"
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textView_statusTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
