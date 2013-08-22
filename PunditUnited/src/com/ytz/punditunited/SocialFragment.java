@@ -67,7 +67,7 @@ public class SocialFragment extends ListFragment {
 
 	private void getPost() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
-		query.orderByDescending("CreatedAt");
+		query.orderByAscending("CreatedAt"); // Not sure why Ascending fetches latest first
 		query.include("User");
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override

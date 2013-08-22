@@ -190,13 +190,27 @@ public class PredictDialogFragment extends DialogFragment {
 		editor.putInt(id, type);
 		// Commit the edits!
 		editor.commit();
-		
+
 		// Post
 		ParseObject myPost = new ParseObject("Post");
 		myPost.put("User", currentUser);
 		myPost.put("PostType", "BetPlaced");
 		myPost.put("History", myLog);
 		myPost.put("Status", comment.getText().toString());
+		String myChoice = null;
+		switch (type) {
+		case 0:
+			myChoice = home;
+			break;
+		case 1:
+			myChoice = "DRAW";
+			break;
+		case 2:
+			myChoice = away;
+			break;
+		}
+		myPost.put("SpecialStatus", "Placed " + seekText.getText() + " "
+				+ myChoice + " for " + home + " vs " + away);
 		myPost.saveInBackground();
 	}
 
