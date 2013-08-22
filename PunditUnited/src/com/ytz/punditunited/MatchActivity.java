@@ -15,7 +15,8 @@ import android.view.MenuItem;
 
 public class MatchActivity extends FragmentActivity {
 
-	static final int NUM_ITEMS = 2;
+	//static final int NUM_ITEMS = 2;
+	static final int NUM_ITEMS = 1;
 	MyAdapter mAdapter;
 	ViewPager mPager;
 
@@ -76,8 +77,8 @@ public class MatchActivity extends FragmentActivity {
 		// add the tabs, register the event handler for the tabs
 		aBar.addTab(aBar.newTab().setText("Predict")
 				.setTabListener(tabListener));
-		aBar.addTab(aBar.newTab().setText("Discuss")
-				.setTabListener(tabListener));
+		//aBar.addTab(aBar.newTab().setText("Discuss")
+				//.setTabListener(tabListener));
 	}
 
 	public static class MyAdapter extends FragmentPagerAdapter {
@@ -97,9 +98,9 @@ public class MatchActivity extends FragmentActivity {
 			case 0:
 				fragment = new PredictFragment();
 				break;
-			case 1:
-				fragment = new SocialFragment();
-				break;
+			//case 1:
+				//fragment = new SocialFragment();
+				//break;
 			default:
 				fragment = null;
 				break;

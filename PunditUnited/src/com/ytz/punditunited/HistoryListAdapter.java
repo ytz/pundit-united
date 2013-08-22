@@ -40,7 +40,7 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 		return ParseObjectList.get(arg0);
 	}
 
-	private class ViewHolder {
+	private static class ViewHolder {
 		TextView tv_homeTeam;
 		TextView tv_awayTeam;
 		TextView tv_gameweek;
@@ -53,6 +53,7 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
+		int type = getItemViewType(position);
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
@@ -65,8 +66,10 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 
 			holder.tv_gameweek = (TextView) convertView
 					.findViewById(R.id.textView_gw);
+			if (type == 1){
 			holder.tv_score = (TextView) convertView
 					.findViewById(R.id.textView_historyScore);
+			}
 			holder.tv_points = (TextView) convertView
 					.findViewById(R.id.textView_historyPoints);
 
@@ -157,5 +160,19 @@ public class HistoryListAdapter extends ArrayAdapter<ParseObject> {
 		holder.iv_away.setImageResource(ClubHelper.getImageResource(away));
 
 		return convertView;
+	}
+
+	@Override
+	public int getItemViewType(int position){
+		// No Score - 0, Score - 1
+		if (ParseObjectList.get(position).getParseObject("Match")
+		.getNumber("H_Goal") != null)
+			return 1;
+		else return 0;
+	}
+	
+	@Override
+	public int getViewTypeCount(){
+		return 2;
 	}
 }

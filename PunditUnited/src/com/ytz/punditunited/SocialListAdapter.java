@@ -53,6 +53,7 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
+		int type = getItemViewType(position);
 		LayoutInflater mInflater = (LayoutInflater) context
 				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
@@ -62,8 +63,10 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 					.findViewById(R.id.imageView_statusProfilePic);
 			holder.tv_name = (TextView) convertView
 					.findViewById(R.id.textView_statusName);
+			if (type == 1){
 			holder.tv_special = (TextView) convertView
 					.findViewById(R.id.textView_statusSpecial);
+			}
 			holder.tv_comment = (TextView) convertView
 					.findViewById(R.id.textView_statusComment);
 			holder.tv_title = (TextView) convertView
@@ -71,11 +74,16 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 			holder.tv_time = (TextView) convertView
 					.findViewById(R.id.textView_statusTime);
 
+			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
 		// Name
 		ParseUser user = (ParseUser) ParseObjectList.get(position).get("User");
+		if (holder.tv_name == null)
+			System.out.println("HOLDER NULL!");
+		if (user == null)
+			System.out.println("USER NULL!");
 		holder.tv_name.setText(user.getString("Name"));
 
 		// Profile Pic
@@ -84,14 +92,14 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 		ImageLoader.getInstance().displayImage(url, holder.iv_profilePic);
 
 		// Special Status
-		if (!ParseObjectList.get(position).getString("SpecialStatus").isEmpty()) {
+		if (ParseObjectList.get(position).getString("SpecialStatus") != null) {
 			Spannable s = ClubHelper.getClubEmoteText(getContext(),
 					ParseObjectList.get(position).getString("SpecialStatus"));
 			holder.tv_special.setText(s);
 		}
 
 		// Status
-		if (!ParseObjectList.get(position).getString("Status").isEmpty()) {
+		if (ParseObjectList.get(position).getString("Status") != null) {
 			holder.tv_comment.setText(ParseObjectList.get(position).getString(
 					"Status"));
 		}
@@ -120,5 +128,18 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 
 		return convertView;
 
+	}
+	
+	@Override
+	public int getItemViewType(int position){
+		// Have Special - 1, No Special - 0
+		if (ParseObjectList.get(position).getString("SpecialStatus") != null)
+			return 1;
+		else return 0;
+	}
+	
+	@Override
+	public int getViewTypeCount(){
+		return 2;
 	}
 }

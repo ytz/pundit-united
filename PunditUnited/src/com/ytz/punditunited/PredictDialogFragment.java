@@ -201,33 +201,28 @@ public class PredictDialogFragment extends DialogFragment {
 		myPost.put("Status", comment.getText().toString());
 		String myChoice = null;
 		String myEmote = "";
-		String myOdds = "";
+		Float myOdds = null;
 		switch (type) {
 		case 0:
 			myChoice = home;
 			myEmote = "[" + home + "]";
-			myOdds = homeOdds;
+			myOdds = Float.parseFloat(homeOdds);
 			break;
 		case 1:
 			myChoice = "DRAW";
-			myOdds = drawOdds;
+			myOdds = Float.parseFloat(drawOdds);
 			break;
 		case 2:
 			myChoice = away;
 			myEmote = "[" + away + "]";
-			myOdds = awayOdds;
+			myOdds = Float.parseFloat(awayOdds);
 			break;
 		}
-		/*
-		 * myPost.put("SpecialStatus", "Placed <b>" + seekText.getText()
-				+ "</b> " + myEmote + " <b>" + myChoice + "</b> for ["
-				+ home + "] <b>" + home + "</b> vs [" + away + "] <b>" + away
-				+ "</b>.");
-		 */
-		myPost.put("SpecialStatus", "[" + home + "] <b>" + home + "</b> vs ["
-				+ away + "] <b>" + away + "</b>    GW " + gameweek + "<br><b>"
-				+ seekText.getText() + "</b> points on " + myEmote + " <b>"
-				+ myChoice + "</b> (" + df.format(myOdds) + ")");
+
+		myPost.put("SpecialStatus", "Placed <b>" + seekText.getText()
+				+ "</b> points on  " + myEmote + "  <b>" + myChoice + "</b> ("
+				+ df.format(myOdds) + ") for  [" + home + "] vs [" + away + "]");
+
 		myPost.saveInBackground();
 	}
 

@@ -72,6 +72,8 @@ public class RankListAdapter extends ArrayAdapter<ParseUser> {
 					.findViewById(R.id.textView_name);
 			holder.tv_rankBy = (TextView) convertView
 					.findViewById(R.id.textView_rankBy);
+			
+			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 
