@@ -91,7 +91,7 @@ public class SocialListAdapter extends ArrayAdapter<ParseObject> {
 		String url = BASE_URL + id + PICTURE;
 		ImageLoader.getInstance().displayImage(url, holder.iv_profilePic);
 
-		// Special Status
+		// Special Status (MIGHT REPLACE WITH 'TYPE')
 		if (ParseObjectList.get(position).getString("SpecialStatus") != null) {
 			Spannable s = ClubHelper.getClubEmoteText(getContext(),
 					ParseObjectList.get(position).getString("SpecialStatus"));

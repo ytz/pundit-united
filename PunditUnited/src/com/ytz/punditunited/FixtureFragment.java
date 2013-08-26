@@ -93,9 +93,9 @@ public class FixtureFragment extends ListFragment {
 		if (total_predict == 0)
 			H_percent = D_percent = A_percent = 0;
 		else{
-			H_percent = (H_predict / total_predict) * 100;
-			D_percent = (D_predict / total_predict) * 100;
-			A_percent = (A_predict / total_predict) * 100;
+			H_percent = (H_predict / (float)total_predict) * 100;
+			D_percent = (D_predict / (float)total_predict) * 100;
+			A_percent = (A_predict / (float)total_predict) * 100;
 		}
 		
 		intent.putExtra(H_PERCENT, H_percent);
