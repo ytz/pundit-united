@@ -175,6 +175,7 @@ public class FixtureFragment extends ListFragment {
 	private void setUpAdapter() {
 		ArrayList<List<ParseObject>> arrayList = separateListWithDate(list);
 		adapter = new SeparatedListAdapter(getActivity());
+		System.out.println("no. of date = " + arrayList.size());
 		for (int i = 0; i < arrayList.size(); i++) {
 			adapter.addSection(getDateHeader(arrayList.get(i)),
 					new FixtureListAdapter(getActivity(), arrayList.get(i)));
@@ -199,6 +200,7 @@ public class FixtureFragment extends ListFragment {
 		Calendar currCal = Calendar.getInstance();
 		tempCal.setTime(currDate);
 		ArrayList<List<ParseObject>> myList = new ArrayList<List<ParseObject>>();
+		//System.out.println("LIST SIZE = " + list.size());
 		for (int i = 0; i < list.size(); i++) {
 			currDate = list.get(i).getDate("Date");
 			currCal.setTime(currDate);
@@ -207,14 +209,19 @@ public class FixtureFragment extends ListFragment {
 					|| currCal.get(Calendar.MONTH) != tempCal
 							.get(Calendar.MONTH)) {
 				myList.add(list.subList(cutoff, i));
+				System.out.println("cutoff = " + i);
 				cutoff = i;
 				tempCal.setTime(currCal.getTime());
 				--i;
 			}
 
 			// Odd Last case problem
-			if (i == list.size() - 1) {
-				myList.add(list.subList(list.size() - 1, list.size()));
+			//if (i == list.size() - 1) {
+				//myList.add(list.subList(list.size() - 1, list.size()));
+			//}
+			
+			if (cutoff != list.size() - 1) {
+				myList.add(list.subList(cutoff, list.size()));
 			}
 		}
 		return myList;
